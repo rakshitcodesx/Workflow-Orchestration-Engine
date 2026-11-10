@@ -1,0 +1,34 @@
+{
+  "workflowId": "PST_AD_165",
+  "name": "AI Agent Orchestration Flow",
+  "version": "1.0.0",
+  "description": "Primary workflow for PST_AD_165 AI agent task orchestration.",
+  "steps": [
+    {
+      "stepId": "step_001",
+      "name": "Data Ingestion",
+      "description": "Ingest raw data from upstream source.",
+      "maxAttempts": 3
+    },
+    {
+      "stepId": "step_002",
+      "name": "AI Analysis",
+      "description": "Run the LLM inference pass over ingested data.",
+      "maxAttempts": 3
+    },
+    {
+      "stepId": "step_003",
+      "name": "Human Approval Gate",
+      "description": "Pause for human-in-the-loop approval before writing output.",
+      "maxAttempts": 1,
+      "requiresApproval": true
+    },
+    {
+      "stepId": "step_004",
+      "name": "Result Persistence",
+      "description": "Persist final results to downstream storage.",
+      "maxAttempts": 3
+    }
+  ]
+}
+
