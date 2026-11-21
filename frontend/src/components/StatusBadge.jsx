@@ -10,7 +10,8 @@ import {
 import { getStatusMeta, STEP_STATUSES } from '../utils/status';
 
 /**
- * StatusBadge — Aqua Glass Light Theme
+ * StatusBadge — Deep Cool Aqua Glass Theme
+ * High-contrast, cool tones on dark glass surfaces.
  */
 export default function StatusBadge({
   status,
@@ -37,34 +38,34 @@ export default function StatusBadge({
     switch (meta.variant) {
       case 'running':
         return {
-          background: 'rgba(14,165,233,0.10)',
-          color: '#0369A1',
-          border: '1px solid rgba(14,165,233,0.30)',
+          background: 'rgba(14,165,233,0.18)',
+          color: '#38BDF8',
+          border: '1px solid rgba(14,165,233,0.46)',
         };
       case 'waiting':
         return {
-          background: 'rgba(217,119,6,0.10)',
-          color: '#92400E',
-          border: '1px solid rgba(217,119,6,0.30)',
+          background: 'rgba(245,158,11,0.18)',
+          color: '#FCD34D',
+          border: '1px solid rgba(245,158,11,0.46)',
         };
       case 'succeeded':
         return {
-          background: 'rgba(0,189,157,0.10)',
-          color: '#065F46',
-          border: '1px solid rgba(0,189,157,0.30)',
+          background: 'rgba(0,189,157,0.18)',
+          color: '#6EE7C7',
+          border: '1px solid rgba(0,189,157,0.46)',
         };
       case 'failed':
         return {
-          background: 'rgba(225,29,72,0.09)',
-          color: '#9F1239',
-          border: '1px solid rgba(225,29,72,0.25)',
+          background: 'rgba(244,63,94,0.18)',
+          color: '#FDA4AF',
+          border: '1px solid rgba(244,63,94,0.46)',
         };
       case 'pending':
       default:
         return {
-          background: 'rgba(101,125,145,0.09)',
-          color: '#475569',
-          border: '1px solid rgba(101,125,145,0.22)',
+          background: 'rgba(73,140,175,0.18)',
+          color: '#90C4D8',
+          border: '1px solid rgba(73,140,175,0.38)',
         };
     }
   };

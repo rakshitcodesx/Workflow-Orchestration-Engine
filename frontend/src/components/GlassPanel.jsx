@@ -1,7 +1,8 @@
 import React from 'react';
 
 /**
- * GlassPanel — Aqua Glass Light Theme wrapper
+ * GlassPanel — Deep Cool Aqua Glass Theme wrapper
+ * No warm/cream tones. Strictly cool cyan, navy, slate.
  */
 export default function GlassPanel({
   children,
@@ -27,8 +28,8 @@ export default function GlassPanel({
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '14px 20px',
-            borderBottom: '1px solid rgba(73,198,229,0.16)',
-            background: 'rgba(173, 232, 240, 0.28)',
+            borderBottom: '1px solid rgba(73,198,229,0.30)',
+            background: 'rgba(8, 38, 58, 0.88)',
             borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0',
           }}
         >
@@ -37,7 +38,7 @@ export default function GlassPanel({
               style={{
                 fontWeight: 700,
                 fontSize: 14,
-                color: 'var(--text-primary)',
+                color: '#E2F4FA',
                 letterSpacing: '-0.01em',
               }}
             >
@@ -56,10 +57,10 @@ export default function GlassPanel({
         <div
           style={{
             padding: '10px 20px',
-            borderTop: '1px solid rgba(73,198,229,0.14)',
-            background: 'rgba(173, 232, 240, 0.20)',
+            borderTop: '1px solid rgba(73,198,229,0.24)',
+            background: 'rgba(6, 30, 46, 0.88)',
             fontSize: 12,
-            color: 'var(--text-muted)',
+            color: '#6499B2',
             borderRadius: '0 0 var(--radius-lg) var(--radius-lg)',
           }}
         >

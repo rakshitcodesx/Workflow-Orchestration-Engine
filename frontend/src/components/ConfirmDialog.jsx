@@ -3,7 +3,7 @@ import { AlertCircle, CheckCircle, HelpCircle, X } from 'lucide-react';
 import GlassPanel from './GlassPanel';
 
 /**
- * ConfirmDialog — Aqua Glass Light Theme
+ * ConfirmDialog — Deep Cool Aqua Glass Theme
  */
 export default function ConfirmDialog({
   isOpen,
@@ -35,7 +35,7 @@ export default function ConfirmDialog({
 
   const icon =
     variant === 'danger' ? (
-      <AlertCircle size={22} color="#E11D48" />
+      <AlertCircle size={22} color="#F43F5E" />
     ) : variant === 'success' ? (
       <CheckCircle size={22} color="#00BD9D" />
     ) : (
@@ -51,8 +51,8 @@ export default function ConfirmDialog({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'rgba(23,40,63,0.30)',
-        backdropFilter: 'blur(10px)',
+        background: 'rgba(6, 20, 32, 0.70)',
+        backdropFilter: 'blur(12px)',
         padding: 'var(--space-4)',
       }}
       onClick={!loading ? onCancel : undefined}
@@ -66,7 +66,7 @@ export default function ConfirmDialog({
           header={
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               {icon}
-              <span style={{ color: 'var(--text-primary)' }}>{title}</span>
+              <span style={{ color: '#E2F4FA' }}>{title}</span>
             </div>
           }
           actions={
@@ -79,7 +79,7 @@ export default function ConfirmDialog({
         >
           <p
             style={{
-              color: 'var(--text-body)',
+              color: '#C8E8F2',
               fontSize: 14,
               lineHeight: 1.65,
               marginBottom: 24,

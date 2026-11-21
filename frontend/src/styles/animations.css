@@ -52,8 +52,8 @@
 }
 
 @keyframes glow-pulse-amber {
-  0%, 100% { box-shadow: 0 0 10px -2px rgba(217, 119, 6, 0.30); }
-  50%       { box-shadow: 0 0 22px 3px rgba(217, 119, 6, 0.55); }
+  0%, 100% { box-shadow: 0 0 10px -2px rgba(245, 158, 11, 0.30); }
+  50%       { box-shadow: 0 0 22px 3px rgba(245, 158, 11, 0.55); }
 }
 
 @keyframes shimmer {

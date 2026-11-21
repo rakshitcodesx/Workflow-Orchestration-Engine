@@ -50,14 +50,14 @@ const TAU = 2 * Math.PI;
 // yFrac: vertical anchor fraction (lower 35–45% of viewport)
 // amp: vertical peak displacement in CSS px
 // alpha: base ribbon opacity
-// color: palette hex
+// color: palette hex (graduated cool dark-blue / slate-blue / ocean-blue shades)
 const WAVES = [
-  { period1s: 17, period2s: 11, spatialFreq: 0.0042, yFrac: 0.58, amp: 21, alpha: 0.20, color: '#54DEFD' },
-  { period1s: 20, period2s: 13, spatialFreq: 0.0036, yFrac: 0.65, amp: 19, alpha: 0.18, color: '#49C6E5' },
-  { period1s: 24, period2s: 15, spatialFreq: 0.0030, yFrac: 0.72, amp: 18, alpha: 0.17, color: '#00BD9D' },
-  { period1s: 28, period2s: 18, spatialFreq: 0.0024, yFrac: 0.79, amp: 17, alpha: 0.15, color: '#8BD7D2' },
-  { period1s: 33, period2s: 21, spatialFreq: 0.0019, yFrac: 0.87, amp: 16, alpha: 0.14, color: '#49C6E5' },
-  { period1s: 38, period2s: 24, spatialFreq: 0.0014, yFrac: 0.94, amp: 15, alpha: 0.12, color: '#54DEFD' },
+  { period1s: 17, period2s: 11, spatialFreq: 0.0042, yFrac: 0.58, amp: 21, alpha: 0.30, color: '#1E4D75' },
+  { period1s: 20, period2s: 13, spatialFreq: 0.0036, yFrac: 0.65, amp: 19, alpha: 0.28, color: '#164268' },
+  { period1s: 24, period2s: 15, spatialFreq: 0.0030, yFrac: 0.72, amp: 18, alpha: 0.26, color: '#113B5C' },
+  { period1s: 28, period2s: 18, spatialFreq: 0.0024, yFrac: 0.79, amp: 17, alpha: 0.24, color: '#1A3D5E' },
+  { period1s: 33, period2s: 21, spatialFreq: 0.0019, yFrac: 0.87, amp: 16, alpha: 0.22, color: '#0E2D48' },
+  { period1s: 38, period2s: 24, spatialFreq: 0.0014, yFrac: 0.94, amp: 15, alpha: 0.20, color: '#0A233A' },
 ];
 
 const W_OMEGA1 = WAVES.map((w) => TAU / w.period1s);

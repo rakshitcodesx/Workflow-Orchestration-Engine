@@ -1,83 +1,85 @@
 /**
  * Design Tokens — PST_AD_165 Workflow Orchestration UI
- * Aqua Glass Light Theme — Ocean Blue / Sea Glass / Jade Teal palette.
+ * Aqua Glass Dark Theme — Cool Cyan / Deep Ocean / Slate palette.
+ * No warm, cream, or yellowish tones anywhere in UI surfaces.
  */
 :root {
   /* ── Aqua Brand Palette ── */
   --aqua-ocean:    #49C6E5;   /* Ocean Blue  */
   --aqua-electric: #54DEFD;   /* Electric Ice */
-  --aqua-soft-white: #FFFBFA; /* Soft White  */
+  --aqua-soft-white: #FFFBFA; /* Soft White — kept for wave compat only, do not use on UI surfaces */
   --aqua-jade:     #00BD9D;   /* Jade Teal   */
   --aqua-sea:      #8BD7D2;   /* Sea Glass   */
 
-  /* ── Surface Colors ── */
-  --bg-primary:    #F4FBFC;
-  --bg-secondary:  #EBF7FA;
-  --bg-tertiary:   #DDF1F7;
-  --bg-elevated:   #CEEEF6;
-  --bg-card:       rgba(255, 251, 250, 0.72);
-  --bg-card-hover: rgba(255, 251, 250, 0.90);
-  --bg-modal-backdrop: rgba(23, 40, 63, 0.35);
+  /* ── Surface Colors — cool cyan/slate only (raised opacity 0.88–0.96) ── */
+  --bg-primary:    #C8E8F2;
+  --bg-secondary:  #AEDAE9;
+  --bg-tertiary:   #96CCDE;
+  --bg-elevated:   #7DBFD4;
+  --bg-card:       rgba(10, 44, 66, 0.90);
+  --bg-card-hover: rgba(12, 48, 74, 0.96);
+  --bg-modal-backdrop: rgba(6, 20, 32, 0.70);
 
-  /* ── Glassmorphism Tokens ── */
-  --glass-bg:          rgba(255, 251, 250, 0.58);
-  --glass-bg-subtle:   rgba(255, 251, 250, 0.42);
-  --glass-border:      rgba(255, 255, 255, 0.80);
-  --glass-border-aqua: rgba(73, 198, 229, 0.30);
-  --glass-border-focus: rgba(0, 189, 157, 0.50);
-  --glass-blur:        blur(20px);
-  --glass-shadow:      0 12px 36px rgba(30, 100, 130, 0.07), 0 2px 8px rgba(73, 198, 229, 0.06);
-  --glass-shadow-hover: 0 16px 44px rgba(30, 100, 130, 0.11), 0 4px 12px rgba(73, 198, 229, 0.10);
-  --glass-glow:        0 0 0 1px rgba(73, 198, 229, 0.18);
+  /* ── Glassmorphism Tokens — deep cool glass ── */
+  --glass-bg:          rgba(10, 44, 66, 0.90);
+  --glass-bg-subtle:   rgba(8, 36, 56, 0.88);
+  --glass-border:      rgba(84, 222, 253, 0.28);
+  --glass-border-aqua: rgba(73, 198, 229, 0.52);
+  --glass-border-focus: rgba(0, 189, 157, 0.70);
+  --glass-blur:        blur(24px);
+  --glass-shadow:      0 12px 40px rgba(4, 16, 28, 0.55), 0 2px 10px rgba(73, 198, 229, 0.18);
+  --glass-shadow-hover: 0 18px 52px rgba(4, 16, 28, 0.65), 0 4px 16px rgba(73, 198, 229, 0.26);
+  --glass-glow:        0 0 0 1px rgba(73, 198, 229, 0.38);
 
   /* ── Primary Brand & Accents ── */
   --brand-primary:       var(--aqua-ocean);
   --brand-primary-hover: #3AB4D2;
-  --brand-primary-glow:  rgba(73, 198, 229, 0.30);
+  --brand-primary-glow:  rgba(73, 198, 229, 0.40);
   --brand-accent:        var(--aqua-jade);
-  --brand-accent-glow:   rgba(0, 189, 157, 0.25);
+  --brand-accent-glow:   rgba(0, 189, 157, 0.35);
   --brand-secondary:     var(--aqua-sea);
 
   /* ── Workflow State Colors ── */
-  --status-pending:        #657D91;
-  --status-pending-bg:     rgba(101, 125, 145, 0.08);
-  --status-pending-border: rgba(101, 125, 145, 0.20);
+  --status-pending:        #7BA8BE;
+  --status-pending-bg:     rgba(73, 140, 175, 0.18);
+  --status-pending-border: rgba(73, 140, 175, 0.38);
 
-  --status-running:        #0EA5E9;
-  --status-running-bg:     rgba(14, 165, 233, 0.09);
-  --status-running-border: rgba(14, 165, 233, 0.28);
-  --status-running-glow:   rgba(14, 165, 233, 0.20);
+  --status-running:        #38C8F0;
+  --status-running-bg:     rgba(14, 165, 233, 0.18);
+  --status-running-border: rgba(14, 165, 233, 0.46);
+  --status-running-glow:   rgba(14, 165, 233, 0.32);
 
-  --status-waiting:        #D97706;
-  --status-waiting-bg:     rgba(217, 119, 6, 0.09);
-  --status-waiting-border: rgba(217, 119, 6, 0.28);
-  --status-waiting-glow:   rgba(217, 119, 6, 0.22);
+  --status-waiting:        #F59E0B;
+  --status-waiting-bg:     rgba(245, 158, 11, 0.16);
+  --status-waiting-border: rgba(245, 158, 11, 0.42);
+  --status-waiting-glow:   rgba(245, 158, 11, 0.30);
 
   --status-succeeded:        var(--aqua-jade);
-  --status-succeeded-bg:     rgba(0, 189, 157, 0.09);
-  --status-succeeded-border: rgba(0, 189, 157, 0.28);
-  --status-succeeded-glow:   rgba(0, 189, 157, 0.22);
+  --status-succeeded-bg:     rgba(0, 189, 157, 0.16);
+  --status-succeeded-border: rgba(0, 189, 157, 0.42);
+  --status-succeeded-glow:   rgba(0, 189, 157, 0.32);
 
-  --status-failed:        #E11D48;
-  --status-failed-bg:     rgba(225, 29, 72, 0.08);
-  --status-failed-border: rgba(225, 29, 72, 0.25);
-  --status-failed-glow:   rgba(225, 29, 72, 0.18);
+  --status-failed:        #F43F5E;
+  --status-failed-bg:     rgba(244, 63, 94, 0.16);
+  --status-failed-border: rgba(244, 63, 94, 0.40);
+  --status-failed-glow:   rgba(244, 63, 94, 0.28);
 
-  /* ── Typography ── */
+  /* ── Typography — cool slate tones only ── */
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
 
-  --text-primary:   #17283F;
-  --text-body:      #243B53;
-  --text-secondary: #657D91;
-  --text-muted:     #8FA5B6;
-  --text-disabled:  #B4C5D2;
+  --text-primary:   #F0FAFF;
+  --header-title:   #F0FAFF;
+  --text-body:      #C8E8F2;
+  --text-secondary: #90C4D8;
+  --text-muted:     #6499B2;
+  --text-disabled:  #3E6A82;
 
-  /* ── Borders & Dividers ── */
-  --border-subtle:  rgba(73, 198, 229, 0.10);
-  --border-default: rgba(73, 198, 229, 0.20);
-  --border-strong:  rgba(73, 198, 229, 0.38);
-  --border-aqua:    rgba(73, 198, 229, 0.50);
+  /* ── Borders & Dividers — cool cyan only ── */
+  --border-subtle:  rgba(73, 198, 229, 0.22);
+  --border-default: rgba(73, 198, 229, 0.40);
+  --border-strong:  rgba(73, 198, 229, 0.62);
+  --border-aqua:    rgba(73, 198, 229, 0.80);
 
   /* ── Radii ── */
   --radius-xs: 4px;

@@ -20,7 +20,7 @@ export default function Header({
   }, []);
 
   const connDotColor = isDemoMode ? '#D97706' : backendConnected ? '#00BD9D' : '#E11D48';
-  const connLabel    = isDemoMode ? 'Demo' : checkingHealth ? '…' : backendConnected ? 'Live' : 'Offline';
+  const connLabel = isDemoMode ? 'Demo' : checkingHealth ? '…' : backendConnected ? 'Live' : 'Offline';
 
   return (
     <header className="dashboard-header">
@@ -37,7 +37,7 @@ export default function Header({
             flexShrink: 0,
           }}
         >
-          <Waves size={17} color="#ffffff" strokeWidth={2.2} />
+          <Waves size={17} color="#F0FAFF" strokeWidth={2.2} />
         </div>
 
         {/* Title */}
@@ -45,19 +45,22 @@ export default function Header({
           {/* On narrow: title on its own line so badge doesn't compete for space */}
           {narrow ? (
             <>
-              <span style={{
-                display: 'block',
-                fontWeight: 800, fontSize: 13,
-                letterSpacing: '-0.03em', color: '#17283F',
-                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-              }}>
+              <span
+                className="header-title-short"
+                style={{
+                  display: 'block',
+                  fontWeight: 800, fontSize: 13,
+                  letterSpacing: '-0.03em', color: '#F0FAFF',
+                  whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                }}
+              >
                 Orchestration Engine
               </span>
               <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 2 }}>
                 <span style={{
                   fontSize: 10, padding: '1px 5px', borderRadius: 999,
-                  background: 'rgba(73,198,229,0.12)', color: '#2A8FA8',
-                  fontWeight: 700, border: '1px solid rgba(73,198,229,0.28)',
+                  background: 'rgba(73,198,229,0.22)', color: '#54DEFD',
+                  fontWeight: 700, border: '1px solid rgba(73,198,229,0.46)',
                   letterSpacing: '0.03em',
                 }}>PST_AD_165</span>
               </div>
@@ -65,21 +68,24 @@ export default function Header({
           ) : (
             <>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{
-                  fontWeight: 800, fontSize: 16,
-                  letterSpacing: '-0.03em', color: '#17283F',
-                  whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                }}>
+                <span
+                  className="header-title-full"
+                  style={{
+                    fontWeight: 800, fontSize: 16,
+                    letterSpacing: '-0.03em', color: '#F0FAFF',
+                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                  }}
+                >
                   Workflow Orchestration Engine
                 </span>
                 <span style={{
                   fontSize: 10, padding: '2px 6px', borderRadius: 999,
-                  background: 'rgba(73,198,229,0.12)', color: '#2A8FA8',
-                  fontWeight: 700, border: '1px solid rgba(73,198,229,0.28)',
+                  background: 'rgba(73,198,229,0.22)', color: '#54DEFD',
+                  fontWeight: 700, border: '1px solid rgba(73,198,229,0.46)',
                   letterSpacing: '0.03em', flexShrink: 0, whiteSpace: 'nowrap',
                 }}>PST_AD_165</span>
               </div>
-              <div style={{ fontSize: 11, color: '#8FA5B6', marginTop: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <div style={{ fontSize: 11, color: '#90C4D8', marginTop: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 Durable AI Agent Orchestration · Atomic WAL · Zero-Token-Waste
               </div>
             </>
@@ -99,11 +105,11 @@ export default function Header({
               display: 'flex', alignItems: 'center', gap: 5,
               padding: '5px 11px',
               borderRadius: 999,
-              background: 'rgba(255,251,250,0.80)',
-              border: `1px solid ${isDemoMode ? 'rgba(217,119,6,0.28)' : backendConnected ? 'rgba(0,189,157,0.30)' : 'rgba(225,29,72,0.25)'}`,
+              background: 'rgba(205,238,247,0.88)',
+              border: `1px solid ${isDemoMode ? 'rgba(217,119,6,0.36)' : backendConnected ? 'rgba(0,189,157,0.40)' : 'rgba(225,29,72,0.33)'}`,
               cursor: !isDemoMode ? 'pointer' : 'default',
               fontSize: 12, fontWeight: 600,
-              color: isDemoMode ? '#92400E' : backendConnected ? '#065F46' : '#9F1239',
+              color: isDemoMode ? '#7A3600' : backendConnected ? '#044F38' : '#891030',
               backdropFilter: 'blur(12px)',
               transition: 'all var(--transition-fast)',
               whiteSpace: 'nowrap',
@@ -117,8 +123,8 @@ export default function Header({
 
         {/* Live / Demo toggle */}
         <div style={{
-          display: 'flex', background: 'rgba(237,248,251,0.90)',
-          padding: 3, borderRadius: 10, border: '1px solid rgba(73,198,229,0.22)',
+          display: 'flex', background: 'rgba(185,230,243,0.92)',
+          padding: 3, borderRadius: 10, border: '1px solid rgba(73,198,229,0.34)',
           gap: 2, backdropFilter: 'blur(12px)', flexShrink: 0,
         }}>
           <button
@@ -128,7 +134,7 @@ export default function Header({
               padding: narrow ? '5px 7px' : '5px 10px',
               borderRadius: 7, fontSize: 12, fontWeight: 700,
               background: !isDemoMode ? 'linear-gradient(135deg,#49C6E5,#3BB8D8)' : 'transparent',
-              color: !isDemoMode ? '#fff' : '#657D91',
+              color: !isDemoMode ? '#031420' : '#90C4D8',
               boxShadow: !isDemoMode ? '0 2px 8px rgba(73,198,229,0.35)' : 'none',
               transition: 'all var(--transition-fast)',
               whiteSpace: 'nowrap',
@@ -144,7 +150,7 @@ export default function Header({
               padding: narrow ? '5px 7px' : '5px 10px',
               borderRadius: 7, fontSize: 12, fontWeight: 700,
               background: isDemoMode ? 'rgba(217,119,6,0.14)' : 'transparent',
-              color: isDemoMode ? '#92400E' : '#657D91',
+              color: isDemoMode ? '#FCD34D' : '#90C4D8',
               border: isDemoMode ? '1px solid rgba(217,119,6,0.28)' : '1px solid transparent',
               transition: 'all var(--transition-fast)',
               whiteSpace: 'nowrap',

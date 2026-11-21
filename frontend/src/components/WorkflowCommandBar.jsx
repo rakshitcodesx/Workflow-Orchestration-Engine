@@ -64,26 +64,26 @@ export default function WorkflowCommandBar({
               alignItems: 'center',
               gap: 7,
               padding: '7px 13px',
-              background: 'rgba(237,248,251,0.80)',
-              border: '1px solid rgba(73,198,229,0.28)',
+              background: 'rgba(8, 38, 58, 0.92)',
+              border: '1px solid rgba(73,198,229,0.46)',
               borderRadius: 'var(--radius-sm)',
               fontSize: 13,
-              color: 'var(--text-body)',
+              color: '#F0FAFF',
               fontWeight: 600,
               whiteSpace: 'nowrap',
               flexShrink: 0,
             }}
           >
-            <Database size={13} color="var(--aqua-ocean)" />
+            <Database size={13} color="#49C6E5" />
             <span>PST_AD_165</span>
             <span
               style={{
                 fontSize: 10,
                 padding: '1px 6px',
                 borderRadius: 999,
-                background: 'rgba(73,198,229,0.12)',
-                color: '#2A8FA8',
-                border: '1px solid rgba(73,198,229,0.22)',
+                background: 'rgba(73,198,229,0.22)',
+                color: '#54DEFD',
+                border: '1px solid rgba(73,198,229,0.46)',
                 fontWeight: 700,
                 letterSpacing: '0.03em',
               }}
@@ -122,14 +122,14 @@ export default function WorkflowCommandBar({
                 alignItems: 'center',
                 gap: 6,
                 padding: '5px 10px',
-                background: 'rgba(237,248,251,0.70)',
-                border: '1px solid rgba(73,198,229,0.20)',
+                background: 'rgba(8, 38, 58, 0.90)',
+                border: '1px solid rgba(73,198,229,0.40)',
                 borderRadius: 'var(--radius-sm)',
                 flexShrink: 0,
               }}
             >
-              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>ID:</span>
-              <code style={{ fontSize: 12, color: '#17283F', fontWeight: 700 }}>
+              <span style={{ fontSize: 11, color: '#90C4D8', fontWeight: 600 }}>ID:</span>
+              <code style={{ fontSize: 12, color: '#F0FAFF', fontWeight: 700 }}>
                 {abbreviateId(instance.instanceId, 10, 6)}
               </code>
               <button
@@ -138,7 +138,7 @@ export default function WorkflowCommandBar({
                   display: 'inline-flex',
                   alignItems: 'center',
                   padding: 2,
-                  color: copied ? '#00BD9D' : '#8FA5B6',
+                  color: copied ? '#00BD9D' : '#90C4D8',
                 }}
                 title="Copy UUID"
               >
@@ -158,12 +158,12 @@ export default function WorkflowCommandBar({
               alignItems: 'center',
               gap: 6,
               padding: '5px 11px',
-              background: 'rgba(0,189,157,0.08)',
-              border: '1px solid rgba(0,189,157,0.22)',
+              background: 'rgba(0,189,157,0.18)',
+              border: '1px solid rgba(0,189,157,0.45)',
               borderRadius: 999,
               fontSize: 11,
               fontWeight: 600,
-              color: '#065F46',
+              color: '#6EE7C7',
               letterSpacing: '0.02em',
               whiteSpace: 'nowrap',
               flexShrink: 1,
@@ -178,7 +178,7 @@ export default function WorkflowCommandBar({
 
           {/* Poll interval */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, flexShrink: 0 }}>
-            <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Poll:</span>
+            <span style={{ color: '#90C4D8', fontWeight: 600 }}>Poll:</span>
             <select
               className="glass-input"
               style={{ padding: '4px 8px', fontSize: 12 }}

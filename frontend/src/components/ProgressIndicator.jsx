@@ -41,7 +41,7 @@ export default function ProgressIndicator({ instance }) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <StatusBadge status={status} />
-            <code style={{ fontSize: 11, color: '#8FA5B6' }}>[{instance.workflowId}]</code>
+            <code style={{ fontSize: 11, color: '#6499B2' }}>[{instance.workflowId}]</code>
           </div>
         </div>
 
@@ -67,7 +67,7 @@ export default function ProgressIndicator({ instance }) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <Sparkles size={14} color="#00BD9D" />
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#065F46' }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#6EE7C7' }}>
               {metrics.zeroTokenWasteCount} cached
             </span>
           </div>
@@ -79,7 +79,7 @@ export default function ProgressIndicator({ instance }) {
             Elapsed Time
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <Clock size={13} color="#8FA5B6" />
+            <Clock size={13} color="#6499B2" />
             <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-body)' }}>
               {formatDuration(createdAt, isCompleted || isFailed ? updatedAt : null)}
             </span>
@@ -98,10 +98,10 @@ export default function ProgressIndicator({ instance }) {
         <div
           style={{
             height: 7,
-            background: 'rgba(73,198,229,0.12)',
+            background: 'rgba(73,198,229,0.20)',
             borderRadius: 999,
             overflow: 'hidden',
-            border: '1px solid rgba(73,198,229,0.15)',
+            border: '1px solid rgba(73,198,229,0.32)',
           }}
         >
           <div

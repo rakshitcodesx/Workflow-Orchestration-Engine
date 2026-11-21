@@ -17,8 +17,9 @@ import { formatDuration } from '../utils/formatters';
 import { STEP_STATUSES } from '../utils/status';
 
 /**
- * StepTimeline — Aqua Glass Light Theme
+ * StepTimeline — Deep Cool Aqua Glass Theme
  * Vertical aqua connector, minimal nodes, approval/retry inline.
+ * Completely free of warm/cream/yellow tones.
  */
 export default function StepTimeline({ instance, onApproveStep, isSubmittingDecision }) {
   const [confirmModal, setConfirmModal] = useState({
@@ -35,7 +36,7 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
         style={{
           padding: '48px 20px',
           textAlign: 'center',
-          color: 'var(--text-muted)',
+          color: '#6499B2',
           fontSize: 13,
         }}
       >
@@ -64,21 +65,21 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
   const nodeStyle = (step) => {
     const { status } = step;
     if (status === 'succeeded')
-      return { bg: 'rgba(0,189,157,0.14)', border: '#00BD9D', color: '#065F46' };
+      return { bg: 'rgba(0,189,157,0.20)', border: '#00BD9D', color: '#6EE7C7' };
     if (status === 'running')
-      return { bg: 'rgba(14,165,233,0.14)', border: '#49C6E5', color: '#0369A1' };
+      return { bg: 'rgba(14,165,233,0.22)', border: '#49C6E5', color: '#54DEFD' };
     if (status === 'waiting_approval')
-      return { bg: 'rgba(217,119,6,0.12)', border: '#D97706', color: '#92400E' };
+      return { bg: 'rgba(245,158,11,0.22)', border: '#F59E0B', color: '#FCD34D' };
     if (status === 'failed')
-      return { bg: 'rgba(225,29,72,0.10)', border: '#E11D48', color: '#9F1239' };
-    return { bg: 'rgba(73,198,229,0.07)', border: 'rgba(73,198,229,0.30)', color: '#657D91' };
+      return { bg: 'rgba(244,63,94,0.22)', border: '#F43F5E', color: '#FDA4AF' };
+    return { bg: 'rgba(10,48,68,0.75)', border: 'rgba(73,198,229,0.36)', color: '#90C4D8' };
   };
 
   /* ── Connector color ── */
   const connectorColor = (step) => {
     if (step.status === 'succeeded') return '#00BD9D';
     if (step.status === 'running')   return '#49C6E5';
-    return 'rgba(73,198,229,0.22)';
+    return 'rgba(73,198,229,0.26)';
   };
 
   return (
@@ -121,9 +122,9 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                   flexShrink: 0,
                   transition: 'all var(--transition-fast)',
                   boxShadow: isRunning
-                    ? '0 0 12px rgba(73,198,229,0.40)'
+                    ? '0 0 14px rgba(73,198,229,0.50)'
                     : isWaiting
-                    ? '0 0 12px rgba(217,119,6,0.35)'
+                    ? '0 0 14px rgba(245,158,11,0.45)'
                     : 'none',
                 }}
                 className={
@@ -171,17 +172,19 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                 className="glass-card"
                 style={{
                   border: isWaiting
-                    ? '1px solid rgba(217,119,6,0.30)'
+                    ? '1px solid rgba(245,158,11,0.46)'
                     : isRunning
-                    ? '1px solid rgba(73,198,229,0.35)'
+                    ? '1px solid rgba(73,198,229,0.52)'
                     : isFailed
-                    ? '1px solid rgba(225,29,72,0.25)'
-                    : '1px solid rgba(255,255,255,0.78)',
+                    ? '1px solid rgba(244,63,94,0.46)'
+                    : '1px solid rgba(73,198,229,0.28)',
                   background: isWaiting
-                    ? 'rgba(255,251,245,0.80)'
+                    ? 'rgba(20, 48, 68, 0.90)'
                     : isRunning
-                    ? 'rgba(240,250,255,0.80)'
-                    : 'rgba(255,251,250,0.72)',
+                    ? 'rgba(14, 54, 80, 0.90)'
+                    : isFailed
+                    ? 'rgba(38, 20, 36, 0.90)'
+                    : 'rgba(10, 48, 70, 0.86)',
                 }}
               >
                 {/* Row: title / id / metrics / badge */}
@@ -196,7 +199,7 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                 >
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-primary)' }}>
+                      <span style={{ fontWeight: 700, fontSize: 14, color: '#E2F4FA' }}>
                         {step.name}
                       </span>
                       <code
@@ -204,16 +207,16 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                           fontSize: 10,
                           padding: '1px 6px',
                           borderRadius: 4,
-                          background: 'rgba(73,198,229,0.08)',
-                          color: '#2A8FA8',
-                          border: '1px solid rgba(73,198,229,0.18)',
+                          background: 'rgba(73,198,229,0.20)',
+                          color: '#54DEFD',
+                          border: '1px solid rgba(73,198,229,0.42)',
                           fontWeight: 600,
                         }}
                       >
                         {step.stepId}
                       </code>
                     </div>
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
+                    <div style={{ fontSize: 11, color: '#6499B2', marginTop: 2 }}>
                       {step.requiresApproval
                         ? '⊙ Human-in-the-Loop review gate'
                         : '⊡ Automated agent step'}
@@ -228,9 +231,9 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                         fontFamily: 'var(--font-mono)',
                         padding: '2px 8px',
                         borderRadius: 4,
-                        background: 'rgba(73,198,229,0.07)',
-                        border: '1px solid rgba(73,198,229,0.18)',
-                        color: '#657D91',
+                        background: 'rgba(8, 44, 64, 0.88)',
+                        border: '1px solid rgba(73,198,229,0.36)',
+                        color: '#90C4D8',
                       }}
                     >
                       {step.attempts}/{step.maxAttempts}
@@ -242,7 +245,7 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                         alignItems: 'center',
                         gap: 4,
                         fontSize: 12,
-                        color: '#8FA5B6',
+                        color: '#6499B2',
                         fontFamily: 'var(--font-mono)',
                       }}
                     >
@@ -261,10 +264,10 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                       alignItems: 'center',
                       gap: 5,
                       fontSize: 11,
-                      color: '#065F46',
+                      color: '#6EE7C7',
                       marginTop: 10,
                       paddingTop: 8,
-                      borderTop: '1px solid rgba(0,189,157,0.14)',
+                      borderTop: '1px solid rgba(0,189,157,0.24)',
                     }}
                   >
                     <Sparkles size={12} color="#00BD9D" />
@@ -279,8 +282,8 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                       marginTop: 12,
                       padding: '12px 14px',
                       borderRadius: 8,
-                      background: 'rgba(255,245,220,0.60)',
-                      border: '1px solid rgba(217,119,6,0.28)',
+                      background: 'rgba(28, 46, 62, 0.92)',
+                      border: '1px solid rgba(245,158,11,0.44)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
@@ -289,12 +292,12 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <ShieldAlert size={22} color="#D97706" />
+                      <ShieldAlert size={22} color="#F59E0B" />
                       <div>
-                        <div style={{ fontWeight: 700, fontSize: 13, color: '#78350F' }}>
+                        <div style={{ fontWeight: 700, fontSize: 13, color: '#FCD34D' }}>
                           Human Operator Approval Required
                         </div>
-                        <div style={{ fontSize: 12, color: '#92400E', marginTop: 2 }}>
+                        <div style={{ fontSize: 12, color: '#90C4D8', marginTop: 2 }}>
                           Engine paused — review upstream analysis before authorising persistence.
                         </div>
                       </div>
@@ -325,8 +328,8 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                       marginTop: 10,
                       padding: '10px 12px',
                       borderRadius: 8,
-                      background: 'rgba(255,245,247,0.70)',
-                      border: '1px solid rgba(225,29,72,0.20)',
+                      background: 'rgba(40, 16, 28, 0.90)',
+                      border: '1px solid rgba(244,63,94,0.40)',
                     }}
                   >
                     <div
@@ -337,12 +340,12 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                         justifyContent: 'space-between',
                         cursor: 'pointer',
                         fontSize: 12,
-                        color: '#9F1239',
+                        color: '#FDA4AF',
                         fontWeight: 600,
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <AlertTriangle size={13} color="#E11D48" />
+                        <AlertTriangle size={13} color="#F43F5E" />
                         Last error: {step.lastError.split('(')[0].trim()}
                       </div>
                       {isErrOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -352,11 +355,11 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                         style={{
                           marginTop: 8,
                           padding: 10,
-                          background: 'rgba(255,235,238,0.60)',
+                          background: 'rgba(20, 8, 16, 0.92)',
                           borderRadius: 6,
                           fontSize: 11,
                           fontFamily: 'var(--font-mono)',
-                          color: '#BE123C',
+                          color: '#FECDD3',
                           whiteSpace: 'pre-wrap',
                           wordBreak: 'break-all',
                         }}

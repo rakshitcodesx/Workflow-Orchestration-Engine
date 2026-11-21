@@ -4,8 +4,8 @@ import StatusBadge from './StatusBadge';
 import { abbreviateId, formatRelativeTime } from '../utils/formatters';
 
 /**
- * WorkflowInstances — Aqua Glass Light Theme
- * Styled as a frosted glass table with teal accents.
+ * WorkflowInstances — Deep Cool Aqua Glass Theme
+ * Styled as a dark frosted glass table with cool cyan & slate accents.
  */
 export default function WorkflowInstances({
   instances,
@@ -29,7 +29,7 @@ export default function WorkflowInstances({
     (i) => filterStatus === 'all' || i.status === filterStatus
   );
 
-  /* Progress per row (succededCount / totalSteps) */
+  /* Progress per row (succeededCount / totalSteps) */
   const rowProgress = (inst) => {
     if (!inst.steps) return null;
     const total = inst.steps.length;
@@ -49,15 +49,15 @@ export default function WorkflowInstances({
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '14px 20px',
-          borderBottom: '1px solid rgba(73,198,229,0.16)',
-          background: 'rgba(173, 232, 240, 0.28)',
+          borderBottom: '1px solid rgba(73,198,229,0.30)',
+          background: 'rgba(8, 38, 58, 0.88)',
           gap: 12,
           flexWrap: 'wrap',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-          <Layers size={15} color="var(--aqua-ocean)" style={{ flexShrink: 0 }} />
-          <span style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+          <Layers size={15} color="#49C6E5" style={{ flexShrink: 0 }} />
+          <span style={{ fontWeight: 700, fontSize: 14, color: '#E2F4FA', whiteSpace: 'nowrap' }}>
             {isDemoMode ? 'Demo Workflows' : 'Workflow Instances'}
           </span>
           <span
@@ -65,10 +65,10 @@ export default function WorkflowInstances({
               fontSize: 11,
               padding: '1px 7px',
               borderRadius: 999,
-              background: 'rgba(73,198,229,0.10)',
-              color: '#2A8FA8',
+              background: 'rgba(73,198,229,0.22)',
+              color: '#54DEFD',
               fontWeight: 700,
-              border: '1px solid rgba(73,198,229,0.22)',
+              border: '1px solid rgba(73,198,229,0.46)',
               fontFamily: 'var(--font-mono)',
               flexShrink: 0,
             }}
@@ -101,10 +101,10 @@ export default function WorkflowInstances({
       <div
         style={{
           display: 'flex',
-          gap: 2,
+          gap: 4,
           padding: '8px 20px',
-          borderBottom: '1px solid rgba(73,198,229,0.12)',
-          background: 'rgba(173, 232, 240, 0.15)',
+          borderBottom: '1px solid rgba(73,198,229,0.24)',
+          background: 'rgba(6, 30, 46, 0.92)',
         }}
       >
         {['all', 'running', 'completed', 'failed'].map((st) => (
@@ -119,10 +119,11 @@ export default function WorkflowInstances({
               textTransform: 'capitalize',
               letterSpacing: '0.03em',
               background: filterStatus === st
-                ? 'linear-gradient(135deg,#49C6E5,#3BB8D8)'
-                : 'transparent',
-              color: filterStatus === st ? '#fff' : '#657D91',
-              boxShadow: filterStatus === st ? '0 2px 8px rgba(73,198,229,0.30)' : 'none',
+                ? 'linear-gradient(135deg,#49C6E5,#2BAFD0)'
+                : 'rgba(10, 44, 66, 0.90)',
+              color: filterStatus === st ? '#031420' : '#90C4D8',
+              boxShadow: filterStatus === st ? '0 2px 10px rgba(73,198,229,0.46)' : 'none',
+              border: filterStatus === st ? '1px solid rgba(84,222,253,0.50)' : '1px solid rgba(73,198,229,0.32)',
               transition: 'all var(--transition-fast)',
             }}
           >
@@ -138,7 +139,7 @@ export default function WorkflowInstances({
             style={{
               padding: '36px 20px',
               textAlign: 'center',
-              color: 'var(--text-muted)',
+              color: '#6499B2',
               fontSize: 13,
             }}
           >
@@ -180,7 +181,7 @@ export default function WorkflowInstances({
                         style={{
                           fontSize: 12,
                           fontWeight: 700,
-                          color: isActive ? '#17283F' : '#243B53',
+                          color: isActive ? '#54DEFD' : '#C8E8F2',
                           letterSpacing: '-0.01em',
                         }}
                       >
@@ -201,7 +202,7 @@ export default function WorkflowInstances({
                             style={{
                               flex: 1,
                               height: 5,
-                              background: 'rgba(73,198,229,0.12)',
+                              background: 'rgba(73,198,229,0.22)',
                               borderRadius: 999,
                               overflow: 'hidden',
                             }}
@@ -214,7 +215,7 @@ export default function WorkflowInstances({
                                   inst.status === 'completed'
                                     ? '#00BD9D'
                                     : inst.status === 'failed'
-                                    ? '#E11D48'
+                                    ? '#F43F5E'
                                     : 'linear-gradient(90deg,#49C6E5,#00BD9D)',
                                 borderRadius: 999,
                                 transition: 'width 0.4s ease',
@@ -225,7 +226,7 @@ export default function WorkflowInstances({
                             style={{
                               fontSize: 10,
                               fontFamily: 'var(--font-mono)',
-                              color: '#657D91',
+                              color: '#90C4D8',
                               width: 28,
                               textAlign: 'right',
                             }}
@@ -234,7 +235,7 @@ export default function WorkflowInstances({
                           </span>
                         </div>
                       ) : (
-                        <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>—</span>
+                        <span style={{ color: '#6499B2', fontSize: 12 }}>—</span>
                       )}
                     </td>
 
@@ -246,7 +247,7 @@ export default function WorkflowInstances({
                           alignItems: 'center',
                           gap: 4,
                           fontSize: 12,
-                          color: 'var(--text-muted)',
+                          color: '#6499B2',
                         }}
                       >
                         <Clock size={11} />
@@ -263,7 +264,7 @@ export default function WorkflowInstances({
                             onRemoveTrackedInstance?.(inst.instanceId);
                           }}
                           className="btn-icon"
-                          style={{ padding: 4, color: '#B4C5D2' }}
+                          style={{ padding: 4, color: '#6499B2' }}
                           title="Untrack"
                         >
                           <Trash2 size={13} />

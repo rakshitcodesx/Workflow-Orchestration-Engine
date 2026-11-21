@@ -215,6 +215,8 @@ export default function App() {
     <div className="app-container">
       {/* Fixed canvas background — must be first child so z-index stacking is correct */}
       <AquaMeshBackground />
+      {/* Backdrop tint overlay: deepens wave canvas without altering AquaMeshBackground.jsx */}
+      <div className="mesh-backdrop-overlay" aria-hidden="true" />
 
       <Header
         isDemoMode={isDemoMode}
@@ -322,10 +324,10 @@ export default function App() {
                 <div
                   style={{
                     padding: 'var(--space-4)',
-                    background: 'rgba(225,29,72,0.07)',
-                    border: '1px solid rgba(225,29,72,0.22)',
+                    background: 'rgba(42, 16, 26, 0.90)',
+                    border: '1px solid rgba(244, 63, 94, 0.40)',
                     borderRadius: 'var(--radius-sm)',
-                    color: '#9F1239',
+                    color: '#FDA4AF',
                     marginBottom: 'var(--space-4)',
                     fontSize: 13,
                   }}
@@ -360,11 +362,11 @@ export default function App() {
                     overflow: 'auto',
                     fontSize: 12,
                     fontFamily: 'var(--font-mono)',
-                    color: '#243B53',
-                    background: 'rgba(237,248,251,0.60)',
+                    color: '#C8E8F2',
+                    background: 'rgba(6, 26, 40, 0.94)',
                     padding: 'var(--space-3)',
                     borderRadius: 'var(--radius-sm)',
-                    border: '1px solid rgba(73,198,229,0.15)',
+                    border: '1px solid rgba(73,198,229,0.32)',
                   }}
                 >
                   {JSON.stringify(instance, null, 2)}
