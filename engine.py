@@ -27,6 +27,12 @@ from typing import Optional
 import storage
 
 # ---------------------------------------------------------------------------
+# Boot-time recovery flag (prevents double-spawning on Flask debug reloader)
+# ---------------------------------------------------------------------------
+_recovery_done: bool = False
+_recovery_lock: threading.Lock = threading.Lock()
+
+# ---------------------------------------------------------------------------
 # Module-level logger
 # ---------------------------------------------------------------------------
 logger = logging.getLogger(__name__)
@@ -95,6 +101,101 @@ class WorkflowEngine:
             self.workflow_def.get("version", "?"),
             len(self.workflow_def.get("steps", [])),
         )
+
+    def recover_interrupted_instances(self) -> None:
+        """
+        Boot-time recovery: resume any instances interrupted by a crash.
+
+        This routine is idempotent and guarded by a thread-safe flag to prevent
+        double-spawning during Flask debug reloader restarts. It:
+
+        1. Reads the persisted state from storage.
+        2. Identifies instances with status "running" (mid-flight on crash).
+        3. For each interrupted instance:
+           - Resets any step in "running" status back to "pending" (preserving
+             attempt count so maxAttempts is not bypassed).
+           - Sets instance status to "pending" so run_instance() will retry.
+           - Updates updatedAt timestamp.
+           - Persists via storage.write_state().
+           - Spawns a background thread via run_instance().
+        4. Logs each recovered instance for audit trail.
+
+        Returns
+        -------
+        None
+        """
+        global _recovery_done  # pylint: disable=global-statement
+        with _recovery_lock:
+            if _recovery_done:
+                logger.debug("Boot-time recovery already completed — skipping.")
+                return
+            _recovery_done = True
+
+        logger.info("Starting boot-time recovery of interrupted instances…")
+
+        try:
+            state = storage.read_state()
+            recovered_count = 0
+
+            for instance_id, instance in list(state.items()):
+                instance_status = instance.get("status")
+
+                # Skip already-completed or failed instances.
+                if instance_status not in ("running", "pending"):
+                    continue
+
+                # Only auto-recover instances that are truly interrupted.
+                # We recover "running" instances (mid-flight crash) unconditionally.
+                # For "pending" instances, we only recover if any step is in
+                # "running" or "waiting_approval" state, indicating an interrupted flow.
+                has_running_step = any(
+                    s.get("status") == "running"
+                    for s in instance.get("steps", [])
+                )
+                has_approval_step = any(
+                    s.get("status") == "waiting_approval"
+                    for s in instance.get("steps", [])
+                )
+
+                if instance_status == "pending" and not (has_running_step or has_approval_step):
+                    # This is a clean pending instance that hasn't started yet.
+                    continue
+
+                # Reset any step in "running" back to "pending" (do not reset attempts).
+                for step in instance.get("steps", []):
+                    if step.get("status") == "running":
+                        step["status"] = "pending"
+                        logger.info(
+                            "[%s] Recovery — step '%s' reset from 'running' to 'pending'.",
+                            instance_id[:8], step.get("stepId"),
+                        )
+
+                # Reset instance status to "pending" and update timestamp.
+                instance["status"] = "pending"
+                instance["updatedAt"] = _now_iso()
+
+                # Persist the recovered state.
+                storage.write_state(state)
+                logger.info(
+                    "[%s] Recovery — instance recovered and persisted. "
+                    "Spawning worker thread…",
+                    instance_id[:8],
+                )
+
+                # Spawn the worker thread to resume execution.
+                self.run_instance(instance_id)
+                recovered_count += 1
+
+            logger.info(
+                "Boot-time recovery completed — %d instance(s) recovered.",
+                recovered_count,
+            )
+
+        except Exception as exc:  # pylint: disable=broad-except
+            logger.exception(
+                "Boot-time recovery failed with exception — proceeding without recovery."
+            )
+
 
     # ------------------------------------------------------------------
     # Workflow definition loader
