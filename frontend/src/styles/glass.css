@@ -1,0 +1,155 @@
+/**
+ * Aqua Glass Design Patterns — Light-mode Glassmorphism
+ * Uses rgba(255,251,250) base per the Aqua Glass specification.
+ */
+
+/* ════════════════════════════════════
+   MAIN GLASS PANEL
+   ════════════════════════════════════ */
+.glass-panel {
+  background: rgba(255, 251, 250, 0.52);
+  backdrop-filter: blur(22px) saturate(1.6);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  border-radius: var(--radius-lg);
+  /* 16px */
+  box-shadow: 0 10px 32px rgba(30, 100, 130, 0.09),
+    0 2px 8px rgba(73, 198, 229, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90);
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+/* Inner top-left specular highlight */
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: linear-gradient(140deg,
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0.00) 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Aqua top-edge reflection */
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(84, 222, 253, 0.55) 35%,
+      rgba(73, 198, 229, 0.80) 50%,
+      rgba(84, 222, 253, 0.55) 65%,
+      transparent 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.glass-panel>* {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 16px 44px rgba(30, 100, 130, 0.10),
+    0 4px 12px rgba(73, 198, 229, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+/* ════════════════════════════════════
+   SUBTLE PANEL VARIANT
+   ════════════════════════════════════ */
+.glass-panel-subtle {
+  background: rgba(255, 251, 250, 0.38);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgba(73, 198, 229, 0.22);
+  border-radius: var(--radius-md);
+  /* 12px */
+  box-shadow: 0 4px 16px rgba(30, 100, 130, 0.06);
+}
+
+/* ════════════════════════════════════
+   STEP TIMELINE CARDS
+   ════════════════════════════════════ */
+.glass-card {
+  background: rgba(255, 251, 250, 0.65);
+  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  border-radius: var(--radius-md);
+  /* 12px */
+  padding: 14px 18px;
+  box-shadow: 0 4px 16px rgba(30, 100, 130, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  transition: transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.glass-card:hover {
+  background: rgba(255, 251, 250, 0.82);
+  border-color: rgba(73, 198, 229, 0.32);
+  box-shadow: 0 6px 24px rgba(30, 100, 130, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90);
+  transform: translateY(-1px);
+}
+
+/* ════════════════════════════════════
+   GLASS INPUTS & SELECTS
+   ════════════════════════════════════ */
+.glass-input {
+  background: rgba(255, 251, 250, 0.90);
+  border: 1px solid rgba(73, 198, 229, 0.30);
+  border-radius: 4px;
+  /* 4px per spec */
+  color: #17283F;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 6px 10px;
+  transition: all var(--transition-fast);
+  outline: none;
+  box-shadow: inset 0 1px 2px rgba(30, 100, 130, 0.04);
+}
+
+.glass-input:focus {
+  border-color: #00BD9D;
+  box-shadow: 0 0 0 3px rgba(0, 189, 157, 0.14),
+    inset 0 1px 2px rgba(30, 100, 130, 0.04);
+  background: #FFFBFA;
+}
+
+.glass-input option {
+  background: #FFFBFA;
+  color: #17283F;
+}
+
+/* ════════════════════════════════════
+   STATUS BADGE
+   ════════════════════════════════════ */
+.glass-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  white-space: nowrap;
+}

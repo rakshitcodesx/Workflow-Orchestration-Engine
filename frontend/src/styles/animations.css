@@ -1,0 +1,107 @@
+/**
+ * Aqua Glass Animations — PST_AD_165
+ */
+
+/* ── Background canvas drifts ── */
+@keyframes drift-1 {
+  0%   { transform: translate(0,     0)    scale(1); }
+  33%  { transform: translate(40px, -30px) scale(1.04); }
+  66%  { transform: translate(-20px, 20px) scale(0.98); }
+  100% { transform: translate(0,     0)    scale(1); }
+}
+@keyframes drift-2 {
+  0%   { transform: translate(0,     0)    scale(1); }
+  40%  { transform: translate(-50px, 25px) scale(1.06); }
+  80%  { transform: translate(30px, -40px) scale(0.97); }
+  100% { transform: translate(0,     0)    scale(1); }
+}
+@keyframes drift-3 {
+  0%   { transform: translate(0, 0)     scale(1); }
+  50%  { transform: translate(25px, 35px) scale(1.03); }
+  100% { transform: translate(0, 0)     scale(1); }
+}
+
+/* ── Ribbon wave ── */
+@keyframes ribbon-wave {
+  0%   { transform: translateX(-100%) skewX(-8deg); opacity: 0; }
+  10%  { opacity: 0.5; }
+  80%  { opacity: 0.3; }
+  100% { transform: translateX(200%) skewX(-8deg); opacity: 0; }
+}
+
+/* ── Mesh / particle float ── */
+@keyframes particle-float {
+  0%, 100% { transform: translateY(0); opacity: 0.35; }
+  50%       { transform: translateY(-12px); opacity: 0.65; }
+}
+
+/* ── Component animations ── */
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.60; transform: scale(0.97); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes glow-pulse-aqua {
+  0%, 100% { box-shadow: 0 0 10px -2px rgba(14, 165, 233, 0.25); }
+  50%       { box-shadow: 0 0 20px 2px rgba(14, 165, 233, 0.45); }
+}
+
+@keyframes glow-pulse-amber {
+  0%, 100% { box-shadow: 0 0 10px -2px rgba(217, 119, 6, 0.30); }
+  50%       { box-shadow: 0 0 22px 3px rgba(217, 119, 6, 0.55); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dot-pop {
+  0%, 100% { transform: scale(1);    opacity: 0.5; }
+  50%       { transform: scale(1.4); opacity: 1;   }
+}
+
+/* ── Utility classes ── */
+.animate-spin-slow { animation: spin 2.2s linear infinite; }
+.animate-pulse      { animation: pulse-subtle 1.8s ease-in-out infinite; }
+
+.animate-glow-running {
+  animation: glow-pulse-aqua 2.2s ease-in-out infinite;
+}
+.animate-glow-waiting {
+  animation: glow-pulse-amber 1.8s ease-in-out infinite;
+}
+
+.animate-fade-in { animation: fadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+.shimmer-active {
+  background: linear-gradient(
+    90deg,
+    rgba(73, 198, 229, 0.06) 0%,
+    rgba(73, 198, 229, 0.20) 50%,
+    rgba(73, 198, 229, 0.06) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.8s infinite;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
