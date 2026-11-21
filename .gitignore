@@ -3,3 +3,12 @@ __pycache__/
 .DS_Store
 state.json
 *.pyc
+# React frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# Temporary files
+.screenshots/
