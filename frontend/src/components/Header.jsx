@@ -1,5 +1,5 @@
 import React from 'react';
-import { Waves, Wifi, WifiOff, Zap, Server } from 'lucide-react';
+import { Wifi, WifiOff, Zap, Server } from 'lucide-react';
 
 /**
  * Header — Aqua Glass Light Theme
@@ -27,68 +27,32 @@ export default function Header({
 
       {/* ── Left: brand ── */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0, flex: '1 1 auto', overflow: 'hidden' }}>
-        {/* Logo */}
-        <div
-          style={{
-            width: 34, height: 34, borderRadius: 9,
-            background: 'linear-gradient(135deg, #49C6E5 0%, #00BD9D 100%)',
-            boxShadow: '0 4px 14px rgba(73,198,229,0.40)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
-          }}
-        >
-          <Waves size={17} color="#F0FAFF" strokeWidth={2.2} />
-        </div>
-
         {/* Title */}
         <div style={{ minWidth: 0, overflow: 'hidden' }}>
-          {/* On narrow: title on its own line so badge doesn't compete for space */}
           {narrow ? (
-            <>
-              <span
-                className="header-title-short"
-                style={{
-                  display: 'block',
-                  fontWeight: 800, fontSize: 13,
-                  letterSpacing: '-0.03em', color: '#F0FAFF',
-                  whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                }}
-              >
-                Orchestration Engine
-              </span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 2 }}>
-                <span style={{
-                  fontSize: 10, padding: '1px 5px', borderRadius: 999,
-                  background: 'rgba(73,198,229,0.22)', color: '#54DEFD',
-                  fontWeight: 700, border: '1px solid rgba(73,198,229,0.46)',
-                  letterSpacing: '0.03em',
-                }}>PST_AD_165</span>
-              </div>
-            </>
+            <span
+              className="header-title-short"
+              style={{
+                display: 'block',
+                fontWeight: 800, fontSize: 13,
+                letterSpacing: '-0.03em', color: '#F0FAFF',
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+              }}
+            >
+              Orchestration Engine
+            </span>
           ) : (
-            <>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span
-                  className="header-title-full"
-                  style={{
-                    fontWeight: 800, fontSize: 16,
-                    letterSpacing: '-0.03em', color: '#F0FAFF',
-                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                  }}
-                >
-                  Workflow Orchestration Engine
-                </span>
-                <span style={{
-                  fontSize: 10, padding: '2px 6px', borderRadius: 999,
-                  background: 'rgba(73,198,229,0.22)', color: '#54DEFD',
-                  fontWeight: 700, border: '1px solid rgba(73,198,229,0.46)',
-                  letterSpacing: '0.03em', flexShrink: 0, whiteSpace: 'nowrap',
-                }}>PST_AD_165</span>
-              </div>
-              <div style={{ fontSize: 11, color: '#90C4D8', marginTop: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                Durable AI Agent Orchestration · Atomic WAL · Zero-Token-Waste
-              </div>
-            </>
+            <span
+              className="header-title-full"
+              style={{
+                display: 'block',
+                fontWeight: 800, fontSize: 16,
+                letterSpacing: '-0.03em', color: '#F0FAFF',
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+              }}
+            >
+              Workflow Orchestration Engine
+            </span>
           )}
         </div>
       </div>

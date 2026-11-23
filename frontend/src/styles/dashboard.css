@@ -100,13 +100,6 @@
 /* ════════════════════════════════════
    RESPONSIVE HEADER
    ════════════════════════════════════ */
-/* Hide subtitle text below 540px to prevent header height growth */
-@media (max-width: 540px) {
-  .header-subtitle {
-    display: none;
-  }
-}
-
 /* Switch to short title below 500px */
 .header-title-short {
   display: none;
