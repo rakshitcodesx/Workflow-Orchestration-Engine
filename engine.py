@@ -95,12 +95,34 @@ class WorkflowEngine:
     def __init__(self) -> None:
         """Load workflow definition and wire up storage access."""
         self.workflow_def: dict = self._load_workflow_def()
+        self._zero_token_waste_skips: int = 0
+        self._stats_lock: threading.Lock = threading.Lock()
         logger.info(
             "WorkflowEngine initialised — workflow '%s' v%s loaded (%d steps).",
             self.workflow_def.get("workflowId"),
             self.workflow_def.get("version", "?"),
             len(self.workflow_def.get("steps", [])),
         )
+
+    @property
+    def zero_token_waste_skips(self) -> int:
+        """Total number of step executions skipped because the step was already succeeded (Zero-Token-Waste)."""
+        with self._stats_lock:
+            return self._zero_token_waste_skips
+
+    @zero_token_waste_skips.setter
+    def zero_token_waste_skips(self, value: int) -> None:
+        with self._stats_lock:
+            self._zero_token_waste_skips = int(value)
+
+    def get_zero_token_waste_skips(self) -> int:
+        """Return the count of Zero-Token-Waste skipped steps."""
+        return self.zero_token_waste_skips
+
+    def reset_stats(self) -> None:
+        """Reset the in-memory stats counters."""
+        with self._stats_lock:
+            self._zero_token_waste_skips = 0
 
     def recover_interrupted_instances(self) -> None:
         """
@@ -329,6 +351,8 @@ class WorkflowEngine:
             # (1) Zero-Token-Waste skip check                                  #
             # -------------------------------------------------------------- #
             if step["status"] == "succeeded":
+                with self._stats_lock:
+                    self._zero_token_waste_skips += 1
                 logger.info(
                     "%s SKIP — already succeeded (Zero-Token-Waste).", step_log
                 )

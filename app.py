@@ -66,6 +66,47 @@ def _now_iso() -> str:
 # Routes
 # ---------------------------------------------------------------------------
 
+@app.route("/stats", methods=["GET"])
+@app.route("/api/stats", methods=["GET"])
+def get_stats():
+    """
+    Return lightweight runtime and storage stats for the workflow engine.
+
+    Response JSON:
+        totalInstances: int
+        total_instances: int
+        statusCounts: dict[str, int]
+        status_counts: dict[str, int]
+        zero_token_waste_skips: int
+        zeroTokenWasteSkips: int
+    """
+    state = storage.read_state()
+    total_instances = len(state)
+
+    status_counts = {
+        "pending": 0,
+        "running": 0,
+        "completed": 0,
+        "failed": 0,
+    }
+    for instance in state.values():
+        st = instance.get("status", "unknown")
+        status_counts[st] = status_counts.get(st, 0) + 1
+
+    skips = getattr(engine, "zero_token_waste_skips", 0)
+    if callable(skips):
+        skips = skips()
+
+    return jsonify({
+        "totalInstances": total_instances,
+        "total_instances": total_instances,
+        "statusCounts": status_counts,
+        "status_counts": status_counts,
+        "zero_token_waste_skips": skips,
+        "zeroTokenWasteSkips": skips,
+    }), 200
+
+
 @app.route("/workflows/start", methods=["POST"])
 def start_workflow():
     """
