@@ -352,7 +352,7 @@ export default function App() {
               {/* Card Header */}
               <div className="bp-card-header">
                 <div className="bp-card-header-left">
-                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#22d3ee" strokeWidth="1.5">
+                  <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="#22d3ee" strokeWidth="1.5">
                     <rect x="2" y="2" width="4" height="4" rx="0.5" />
                     <rect x="10" y="2" width="4" height="4" rx="0.5" />
                     <rect x="2" y="10" width="4" height="4" rx="0.5" />
@@ -360,9 +360,9 @@ export default function App() {
                     <line x1="6" y1="4" x2="10" y2="4" />
                     <line x1="4" y1="6" x2="4" y2="10" />
                   </svg>
-                  <span className="bp-card-title">
+                  <h2 className="bp-card-title">
                     Step Execution Graph
-                  </span>
+                  </h2>
                 </div>
 
                 {instance && (

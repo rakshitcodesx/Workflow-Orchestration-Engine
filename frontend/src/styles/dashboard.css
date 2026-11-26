@@ -543,6 +543,13 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  gap: 16px;
+}
+
+.bp-instances-header-block {
+  display: flex;
+  flex-direction: column;
+  background: #0d131d;
 }
 
 /* ── Right Ripple Container (Step Execution Graph) ── */
@@ -570,10 +577,10 @@
   border-radius: 6px;
   box-shadow: 4px 4px 0px #030508;
   flex: 1;
-  padding: 14px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   box-sizing: border-box;
 }
 
@@ -582,23 +589,37 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
+  padding: 12px 16px;
   background: var(--surface-container);
   border-bottom: 1.5px solid #475b7d;
-  gap: 8px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .bp-card-header-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .bp-card-title {
   font-family: var(--font-headline);
-  font-size: 13.5px;
-  color: var(--text-primary);
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: #eef2f8;
+  font-weight: 400;
+  margin: 0;
+}
+@media (max-width: 768px) {
+  .bp-card-title {
+    font-size: 20px;
+  }
+}
+@media (max-width: 480px) {
+  .bp-card-title {
+    font-size: 18px;
+  }
 }
 
 .bp-card-count-badge {
@@ -690,7 +711,11 @@
    ════════════════════════════════════ */
 .bp-table-wrapper {
   overflow-x: auto;
-  background: #0d131d;
+  background: #090d14;
+  margin: 0 14px 16px 14px;
+  border: 1.5px solid #1e314d;
+  border-radius: 6px;
+  box-shadow: 2px 2px 0px #030508;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -791,7 +816,7 @@
   display: flex;
   flex-direction: column;
   padding: 4px 6px;
-  gap: 0;
+  gap: 14px;
   overflow-y: auto;
 }
 
@@ -842,15 +867,15 @@
 
 .bp-step-card-col {
   flex: 1;
-  margin-left: 8px;
-  margin-bottom: 6px;
+  margin-left: 10px;
+  margin-bottom: 0;
 }
 
 .bp-step-card {
   background: var(--surface-container);
   border: 1.5px solid var(--outline);
   border-radius: var(--radius-sm);
-  padding: 8px 12px;
+  padding: 12px 14px;
   box-shadow: 4px 4px 0px #030508;
   transition: border-color var(--transition-fast);
 }
@@ -926,7 +951,7 @@
 }
 
 .bp-wal-badge {
-  margin: 3px 0;
+  margin: 8px 0 10px 0;
   display: flex;
   justify-content: center;
 }

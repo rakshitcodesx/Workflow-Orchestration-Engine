@@ -43,41 +43,44 @@ export default function WorkflowInstances({
   return (
     <div className="bp-ripple-card-left">
       <div className="bp-ripple-inner-left">
-        {/* Card header */}
-        <div className="bp-card-header">
-          <div className="bp-card-header-left">
-            <span className="bp-card-title">
-              {isDemoMode ? `Demo Workflows (${instances.length})` : `Workflow Instances (${instances.length})`}
-            </span>
+        {/* Top Header & Filter Block */}
+        <div className="bp-instances-header-block">
+          {/* Card header */}
+          <div className="bp-card-header">
+            <div className="bp-card-header-left">
+              <h2 className="bp-card-title">
+                {isDemoMode ? `Demo Workflows (${instances.length})` : `Workflow Instances (${instances.length})`}
+              </h2>
+            </div>
+
+            {isDemoMode && <span className="bp-queue-badge">QUEUE_ACTIVE</span>}
           </div>
 
-          {isDemoMode && <span className="bp-queue-badge">QUEUE_ACTIVE</span>}
-        </div>
+          {/* Filter pills & search */}
+          <div className="bp-filter-bar">
+            <div className="bp-filter-pills-group">
+              {['all', 'running', 'completed', 'failed'].map((st) => (
+                <button
+                  key={st}
+                  className={`bp-filter-pill${filterStatus === st ? ' active' : ''}`}
+                  onClick={() => setFilter(st)}
+                >
+                  {st === 'all' ? 'All' : st.charAt(0).toUpperCase() + st.slice(1)}
+                </button>
+              ))}
+            </div>
 
-        {/* Filter pills & search */}
-        <div className="bp-filter-bar">
-          <div className="bp-filter-pills-group">
-            {['all', 'running', 'completed', 'failed'].map((st) => (
-              <button
-                key={st}
-                className={`bp-filter-pill${filterStatus === st ? ' active' : ''}`}
-                onClick={() => setFilter(st)}
-              >
-                {st === 'all' ? 'All' : st.charAt(0).toUpperCase() + st.slice(1)}
-              </button>
-            ))}
+            {/* UUID lookup on the right of the filter bar */}
+            <form onSubmit={handleSubmit} className="bp-filter-search-form">
+              <input
+                type="text"
+                className="bp-input bp-filter-search-input"
+                placeholder="Lookup UUID..."
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+              />
+            </form>
           </div>
-
-          {/* UUID lookup on the right of the filter bar */}
-          <form onSubmit={handleSubmit} className="bp-filter-search-form">
-            <input
-              type="text"
-              className="bp-input bp-filter-search-input"
-              placeholder="Lookup UUID..."
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-            />
-          </form>
         </div>
 
         {/* Table */}
