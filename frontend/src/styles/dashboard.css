@@ -190,16 +190,22 @@
 }
 
 .bp-hub-badge {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background: var(--cobalt);
-  border: 1.5px solid #475b7d;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 4px 4px 0px #030508;
+  height: 32px;
+  width: auto;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.bp-logo-mark {
+  display: block;
+  height: 32px;
+  width: auto;
+  overflow: visible;
 }
 
 .bp-header-title {

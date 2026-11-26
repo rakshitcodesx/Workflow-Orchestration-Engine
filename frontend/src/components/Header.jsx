@@ -12,28 +12,102 @@ export default function Header({ isDemoMode, setIsDemoMode, backendConnected, ch
     <header className="bp-header">
       {/* ── Left: Hub Badge + Large Title ── */}
       <div className="bp-header-left">
-        <div className="bp-hub-badge" title="Workflow Hub">
+        <div className="bp-hub-badge" title="Workflow Orchestration Engine">
           <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
+            width="42"
+            height="32"
+            viewBox="0 0 36 28"
             fill="none"
-            stroke="#ffffff"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            xmlns="http://www.w3.org/2000/svg"
+            className="bp-logo-mark"
+            aria-label="Workflow Engine Logo"
           >
-            <circle cx="12" cy="12" r="3" fill="#ffffff" />
-            <circle cx="12" cy="3" r="2" fill="#ffffff" />
-            <circle cx="20.5" cy="9" r="2" fill="#ffffff" />
-            <circle cx="18" cy="19" r="2" fill="#ffffff" />
-            <circle cx="6" cy="19" r="2" fill="#ffffff" />
-            <circle cx="3.5" cy="9" r="2" fill="#ffffff" />
-            <line x1="12" y1="9" x2="12" y2="5" />
-            <line x1="14.5" y1="10.5" x2="18.5" y2="9.5" />
-            <line x1="13.5" y1="14" x2="16.5" y2="17.5" />
-            <line x1="10.5" y1="14" x2="7.5" y2="17.5" />
-            <line x1="9.5" y1="10.5" x2="5.5" y2="9.5" />
+            {/* Hard Offset Shadow for "W" and Circuit Traces */}
+            <g transform="translate(1.5, 1.5)" opacity="0.95">
+              <polyline
+                points="3 6, 7.2 22, 11.2 12, 15.2 22, 19.4 6"
+                stroke="#030508"
+                strokeWidth="3.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <circle cx="17.3" cy="14" r="2.8" fill="#030508" />
+              <path
+                d="M 17.3 14 H 23.5 V 7 H 29.5"
+                stroke="#030508"
+                strokeWidth="2"
+                strokeLinecap="square"
+                strokeLinejoin="miter"
+              />
+              <path
+                d="M 23.5 14 V 21 H 29.5"
+                stroke="#030508"
+                strokeWidth="2"
+                strokeLinecap="square"
+                strokeLinejoin="miter"
+              />
+              <rect x="29.5" y="5" width="4.2" height="4.2" fill="#030508" />
+              <rect x="29.5" y="19" width="4.2" height="4.2" fill="#030508" />
+            </g>
+
+            {/* Bold Cobalt Geometric "W" */}
+            <polyline
+              points="3 6, 7.2 22, 11.2 12, 15.2 22, 19.4 6"
+              stroke="#1d63ff"
+              strokeWidth="3.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <polyline
+              points="3 6, 7.2 22, 11.2 12, 15.2 22, 19.4 6"
+              stroke="#3b82f6"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+
+            {/* Circular node on the W */}
+            <circle cx="17.3" cy="14" r="2.8" fill="#22d3ee" stroke="#070a0f" strokeWidth="1" />
+            <circle cx="17.3" cy="14" r="1.1" fill="#070a0f" />
+
+            {/* Bright Cyan Orthogonal Circuit Trace Paths */}
+            <path
+              d="M 17.3 14 H 23.5 V 7 H 29.5"
+              stroke="#22d3ee"
+              strokeWidth="1.8"
+              strokeLinecap="square"
+              strokeLinejoin="miter"
+            />
+            <path
+              d="M 23.5 14 V 21 H 29.5"
+              stroke="#22d3ee"
+              strokeWidth="1.8"
+              strokeLinecap="square"
+              strokeLinejoin="miter"
+            />
+
+            {/* Crisp Square Terminal Pads (#22d3ee stroke, dark fill) */}
+            <rect
+              x="29.5"
+              y="5"
+              width="4.2"
+              height="4.2"
+              fill="#070a0f"
+              stroke="#22d3ee"
+              strokeWidth="1.5"
+            />
+            <circle cx="31.6" cy="7.1" r="0.75" fill="#22d3ee" />
+
+            <rect
+              x="29.5"
+              y="19"
+              width="4.2"
+              height="4.2"
+              fill="#070a0f"
+              stroke="#22d3ee"
+              strokeWidth="1.5"
+            />
+            <circle cx="31.6" cy="21.1" r="0.75" fill="#22d3ee" />
           </svg>
         </div>
 
