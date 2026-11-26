@@ -160,14 +160,13 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                     </div>
                   )}
 
-                  {/* Error box */}
+                  {/* Error box — single compact line, no duplicate text */}
                   {step.lastError && (
-                    <div className="bp-error-box" onClick={() => toggleError(step.stepId)}>
+                    <div className="bp-error-box">
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600, fontSize: 11 }}>
-                        <AlertTriangle size={12} color="#ef4444" />
+                        <AlertTriangle size={12} color="#ef4444" style={{ flexShrink: 0 }} />
                         <span>Last error: {step.lastError}</span>
                       </div>
-                      <pre>{step.lastError}</pre>
                     </div>
                   )}
                 </div>

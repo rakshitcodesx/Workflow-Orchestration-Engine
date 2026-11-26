@@ -191,8 +191,8 @@ export default function App() {
         <span className="bp-corner-sparkle">✦</span>
       </div>
 
-      {/* ── 1. Top Coordinate Ruler ── */}
-      <div className="bp-ruler" aria-hidden="true">
+      {/* ── 1. Top Coordinate Ruler (horizontal insets clear corner brackets) ── */}
+      <div className="bp-ruler" aria-hidden="true" style={{ paddingLeft: '48px', paddingRight: '48px' }}>
         <span className="bp-tick-accent">+ 000.0</span>
         <span>|</span>
         <span>SYS.GRID // 16:9</span>
@@ -280,13 +280,11 @@ export default function App() {
 
         {/* 3d. Technical Divider Bar: --[+ 02 // EXECUTION_SPLIT +]-- */}
         <div className="bp-split-divider" aria-hidden="true">
-          <div className="bp-split-divider-line" />
           <span className="bp-split-divider-label">--[+ 02 // EXECUTION_SPLIT +]--</span>
           <div className="bp-split-divider-line" />
           <div className="bp-split-divider-accents">
             <span className="bp-split-accent-plus">+</span>
             <span className="bp-split-accent-arrow">―→</span>
-            <span className="bp-split-accent-ticks">///</span>
           </div>
         </div>
 
@@ -368,8 +366,8 @@ export default function App() {
         </div>
       </main>
 
-      {/* ── 4. Bottom Coordinate Ruler ── */}
-      <div className="bp-ruler bp-ruler-bottom" aria-hidden="true">
+      {/* ── 4. Bottom Coordinate Ruler (horizontal insets clear corner brackets) ── */}
+      <div className="bp-ruler bp-ruler-bottom" aria-hidden="true" style={{ paddingLeft: '48px', paddingRight: '48px' }}>
         <span className="bp-tick-accent">[COORD Y:0900]</span>
         <span style={{ margin: '0 auto' }}>BLUEPRINT_LAYER_01 // NO_TRANSLUCENCY</span>
         <span className="bp-tick-accent">[X:1600 Y:0900]</span>

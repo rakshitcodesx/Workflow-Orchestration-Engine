@@ -440,22 +440,24 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  height: 24px;
+  height: 22px;
+  margin: 2px 0;
   flex-shrink: 0;
-}
-
-.bp-split-divider-line {
-  flex: 1;
-  height: 1px;
-  background: var(--grid-major);
 }
 
 .bp-split-divider-label {
   font-family: var(--font-mono);
   font-size: 10px;
-  color: #475b7d;
+  font-weight: 600;
+  color: var(--cyan);
   letter-spacing: 0.08em;
   white-space: nowrap;
+}
+
+.bp-split-divider-line {
+  flex: 1;
+  height: 1.5px;
+  background: #2a3d5e;
 }
 
 .bp-split-divider-accents {
@@ -464,20 +466,15 @@
   gap: 8px;
   color: var(--cyan);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
 }
 .bp-split-accent-plus {
-  color: var(--cyan);
+  color: var(--white);
   font-weight: 700;
 }
 .bp-split-accent-arrow {
   color: var(--cyan);
-  letter-spacing: 0;
-}
-.bp-split-accent-ticks {
-  color: #475b7d;
-  font-size: 9px;
-  letter-spacing: 0.1em;
+  letter-spacing: -2px;
 }
 
 /* ════════════════════════════════════
@@ -717,10 +714,9 @@
 .bp-steps-wrapper {
   display: flex;
   flex-direction: column;
-  padding: 10px 12px;
+  padding: 8px 12px;
   gap: 0;
   overflow-y: auto;
-  max-height: 68vh;
 }
 
 .bp-step-row {
@@ -733,12 +729,12 @@
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
-  width: 36px;
+  width: 32px;
 }
 
 .bp-step-node {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -746,7 +742,7 @@
   flex-shrink: 0;
   border: 1.5px solid;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   box-shadow: 2px 2px 0px #030508;
 }
@@ -760,8 +756,8 @@
 .bp-step-connector {
   width: 2px;
   flex: 1;
-  min-height: 14px;
-  margin: 3px 0;
+  min-height: 10px;
+  margin: 2px 0;
   border-radius: 1px;
 }
 .bp-step-connector-succeeded { background: var(--success); }
@@ -770,15 +766,15 @@
 
 .bp-step-card-col {
   flex: 1;
-  margin-left: 10px;
-  margin-bottom: 10px;
+  margin-left: 8px;
+  margin-bottom: 6px;
 }
 
 .bp-step-card {
   background: var(--surface-container);
   border: 1.5px solid var(--outline);
   border-radius: var(--radius-sm);
-  padding: 10px 12px;
+  padding: 8px 12px;
   box-shadow: 4px 4px 0px #030508;
   transition: border-color var(--transition-fast);
 }
@@ -854,7 +850,7 @@
 }
 
 .bp-wal-badge {
-  margin: 6px 0;
+  margin: 3px 0;
   display: flex;
   justify-content: center;
 }
@@ -872,23 +868,15 @@
 }
 
 .bp-error-box {
-  margin-top: 8px;
-  padding: 8px 10px;
+  margin-top: 6px;
+  padding: 6px 10px;
   background: var(--error-container);
   border: 1.5px solid var(--error);
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--error-text);
-  box-shadow: 4px 4px 0px #030508;
-  cursor: pointer;
-}
-.bp-error-box pre {
-  margin-top: 6px;
-  white-space: pre-wrap;
-  word-break: break-all;
-  font-size: 10.5px;
-  color: #fecaca;
+  box-shadow: 3px 3px 0px #030508;
 }
 
 .bp-api-error {
