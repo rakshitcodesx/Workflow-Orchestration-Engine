@@ -3,20 +3,19 @@ import React from 'react';
 /**
  * Header — Blueprint Dark Theme
  * Technical Specification Compliance:
- *  - Left: 34px x 34px solid cobalt (#1d63ff) hub badge with white network graph SVG
- *  - Title: Flat ice-blue (#93d5ff) "Workflow Orchestration Engine" (no gradient)
- *  - Subtitle: "DATE, PLAY, MISBEHAVE (WITH WORKFLOWS)" in monospace (#9ba8bd)
- *  - Right: Exactly 3 solid matte-black (#070a0f) buttons: "?", "Live", "Demo"
+ *  - Left: Solid cobalt (#1d63ff) hub badge with white network graph SVG
+ *  - Title: Flat ice-blue (#93d5ff) 38px "Workflow Orchestration Engine" (Alata font, no gradient)
+ *  - Right: Exactly 3 solid matte-black (#070a0f) buttons: "??", "Live", "Demo"
  */
 export default function Header({ isDemoMode, setIsDemoMode, backendConnected, checkingHealth, onCheckHealth }) {
   return (
     <header className="bp-header">
-      {/* ── Left: Hub Badge + Title + Subtitle ── */}
+      {/* ── Left: Hub Badge + Large Title ── */}
       <div className="bp-header-left">
-        <div className="bp-hub-badge" title="PST_AD_165 Hub">
+        <div className="bp-hub-badge" title="Workflow Hub">
           <svg
-            width="20"
-            height="20"
+            width="22"
+            height="22"
             viewBox="0 0 24 24"
             fill="none"
             stroke="#ffffff"
@@ -38,10 +37,7 @@ export default function Header({ isDemoMode, setIsDemoMode, backendConnected, ch
           </svg>
         </div>
 
-        <div className="bp-header-title-group">
-          <span className="bp-header-title">Workflow Orchestration Engine</span>
-          <span className="bp-header-subtitle">DATE, PLAY, MISBEHAVE (WITH WORKFLOWS)</span>
-        </div>
+        <h1 className="bp-header-title">Workflow Orchestration Engine</h1>
       </div>
 
       {/* ── Right: Exactly 3 Matte-Black Buttons ── */}

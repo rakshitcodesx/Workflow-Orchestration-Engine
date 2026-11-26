@@ -346,7 +346,7 @@ export default function App() {
             isDemoMode={isDemoMode}
           />
 
-          {/* Right: Step Execution Graph · PST_AD_165 with Isolated Cobalt/Black Ripple Container */}
+          {/* Right: Step Execution Graph with Isolated Cobalt/Black Ripple Container */}
           <div className="bp-ripple-card-right">
             <div className="bp-ripple-inner-right">
               {/* Card Header */}
@@ -361,7 +361,7 @@ export default function App() {
                     <line x1="4" y1="6" x2="4" y2="10" />
                   </svg>
                   <span className="bp-card-title">
-                    Step Execution Graph · PST_AD_165
+                    Step Execution Graph
                   </span>
                 </div>
 

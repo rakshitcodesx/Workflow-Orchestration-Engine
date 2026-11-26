@@ -16,8 +16,6 @@ export default function ProgressIndicator({ instance, isDemoMode = false }) {
     ? 'running'
     : 'idle';
 
-  const workflowId = instance?.workflowId || 'PST_AD_165';
-
   const succeededCount = hasInstance
     ? (instance.metrics?.succeededCount ?? instance.steps?.filter((s) => s.status === 'succeeded').length ?? 0)
     : isDemoMode
@@ -62,7 +60,7 @@ export default function ProgressIndicator({ instance, isDemoMode = false }) {
         <div className="bp-metric-box">
           <div className="bp-metric-label">WORKFLOW STATUS:</div>
           <div className="bp-metric-value" style={{ color: statusColor }}>
-            {status.toUpperCase().replace('_', ' ')} [{workflowId}]
+            {status.toUpperCase().replace('_', ' ')}
           </div>
         </div>
 
