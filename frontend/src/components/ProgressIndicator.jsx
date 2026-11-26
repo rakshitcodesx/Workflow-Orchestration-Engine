@@ -1,119 +1,76 @@
 import React from 'react';
-import { Sparkles, TrendingUp, Clock, CheckCircle2 } from 'lucide-react';
-import StatusBadge from './StatusBadge';
 import { formatDuration, formatRelativeTime } from '../utils/formatters';
 
 /**
- * ProgressIndicator — Aqua Glass Light Theme
- * Compact metric strip above the main grid.
+ * ProgressIndicator (Summary Strip) — Blueprint Dark Theme
+ * 4-metric boxes over isolated solid #1d63ff/#070a0f concentric ripple background.
  */
 export default function ProgressIndicator({ instance }) {
-  if (!instance) return null;
-
-  const { metrics, status, createdAt, updatedAt } = instance;
-  const isCompleted = status === 'completed';
-  const isFailed    = status === 'failed';
-
-  const progressColor = isCompleted
-    ? 'linear-gradient(90deg, #00BD9D, #54DEFD)'
-    : isFailed
-    ? 'linear-gradient(90deg, #E11D48, #F43F5E)'
-    : 'linear-gradient(90deg, #49C6E5 0%, #00BD9D 100%)';
-
-  return (
-    <div
-      className="glass-panel"
-      style={{ padding: '16px 20px' }}
-    >
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
-          gap: 20,
-          marginBottom: 16,
-          alignItems: 'center',
-        }}
-      >
-        {/* Status */}
-        <div>
-          <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600, marginBottom: 5 }}>
-            Workflow Status
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <StatusBadge status={status} />
-            <code style={{ fontSize: 11, color: '#6499B2' }}>[{instance.workflowId}]</code>
-          </div>
-        </div>
-
-        {/* Pipeline */}
-        <div>
-          <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600, marginBottom: 5 }}>
-            Pipeline Progress
-          </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-            <span style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)' }}>
-              {metrics.succeededCount}
-            </span>
-            <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-              / {metrics.totalSteps} steps
-            </span>
-          </div>
-        </div>
-
-        {/* Zero-Token-Waste */}
-        <div>
-          <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600, marginBottom: 5 }}>
-            Zero-Token-Waste
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <Sparkles size={14} color="#00BD9D" />
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#6EE7C7' }}>
-              {metrics.zeroTokenWasteCount} cached
-            </span>
-          </div>
-        </div>
-
-        {/* Elapsed */}
-        <div>
-          <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600, marginBottom: 5 }}>
-            Elapsed Time
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <Clock size={13} color="#6499B2" />
-            <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-body)' }}>
-              {formatDuration(createdAt, isCompleted || isFailed ? updatedAt : null)}
-            </span>
-          </div>
+  if (!instance) {
+    return (
+      <div className="bp-summary-strip-wrapper">
+        <div className="bp-summary-ripple-bg" />
+        <div className="bp-summary-cards">
+          {['WORKFLOW STATUS', 'PIPELINE PROGRESS', 'ZERO-TOKEN-WASTE', 'ELAPSED TIME'].map((label) => (
+            <div key={label} className="bp-metric-box">
+              <div className="bp-metric-label">{label}</div>
+              <div className="bp-metric-value" style={{ color: '#4f637a', fontSize: 13 }}>—</div>
+            </div>
+          ))}
         </div>
       </div>
+    );
+  }
 
-      {/* Progress bar */}
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-secondary)', marginBottom: 6, fontWeight: 600 }}>
-          <span>Execution completion</span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--text-primary)' }}>
-            {metrics.percentComplete}%
-          </span>
+  const { status, workflowId, steps, metrics, createdAt } = instance;
+  const pct = metrics?.percentComplete ?? 0;
+  const succeededCount = metrics?.succeededCount ?? 0;
+  const totalSteps = metrics?.totalSteps ?? 0;
+  const ztw = metrics?.zeroTokenWasteCount ?? 0;
+  const elapsed = formatDuration(createdAt, null);
+
+  const statusColorMap = {
+    running: '#7babff',
+    completed: '#6ee7b7',
+    failed: '#fecaca',
+    pending: '#8899b4',
+    waiting_approval: '#fde68a',
+  };
+  const statusColor = statusColorMap[status] || '#8899b4';
+
+  return (
+    <div className="bp-summary-strip-wrapper">
+      <div className="bp-summary-ripple-bg" />
+      <div className="bp-summary-cards">
+        {/* 1: Workflow Status */}
+        <div className="bp-metric-box">
+          <div className="bp-metric-label">WORKFLOW STATUS</div>
+          <div className="bp-metric-value" style={{ color: statusColor, fontSize: 13 }}>
+            {status.toUpperCase().replace('_', ' ')}
+          </div>
+          <div className="bp-metric-sub">[{workflowId}]</div>
         </div>
-        <div
-          style={{
-            height: 7,
-            background: 'rgba(73,198,229,0.20)',
-            borderRadius: 999,
-            overflow: 'hidden',
-            border: '1px solid rgba(73,198,229,0.32)',
-          }}
-        >
-          <div
-            style={{
-              height: '100%',
-              width: `${metrics.percentComplete}%`,
-              background: progressColor,
-              borderRadius: 999,
-              transition: 'width 0.55s cubic-bezier(0.4,0,0.2,1)',
-              boxShadow: isCompleted ? '0 0 8px rgba(0,189,157,0.50)' : '0 0 8px rgba(73,198,229,0.40)',
-            }}
-          />
+
+        {/* 2: Pipeline Progress */}
+        <div className="bp-metric-box">
+          <div className="bp-metric-label">PIPELINE PROGRESS</div>
+          <div className="bp-metric-value">{succeededCount} / {totalSteps} steps</div>
+          <div className="bp-progress-track">
+            <div className="bp-progress-fill" style={{ width: `${pct}%` }} />
+          </div>
+        </div>
+
+        {/* 3: Zero-Token-Waste */}
+        <div className="bp-metric-box">
+          <div className="bp-metric-label">ZERO-TOKEN-WASTE</div>
+          <div className="bp-metric-value">{ztw} cached</div>
+          <div className="bp-metric-sub">skip-on-recovery</div>
+        </div>
+
+        {/* 4: Elapsed Time */}
+        <div className="bp-metric-box">
+          <div className="bp-metric-label">ELAPSED TIME</div>
+          <div className="bp-metric-value">{elapsed}</div>
         </div>
       </div>
     </div>

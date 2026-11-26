@@ -1,107 +1,76 @@
 /**
- * Design Tokens — PST_AD_165 Workflow Orchestration UI
- * Aqua Glass Dark Theme — Cool Cyan / Deep Ocean / Slate palette.
- * No warm, cream, or yellowish tones anywhere in UI surfaces.
+ * Design Tokens — PST_AD_165 Blueprint Dark Theme
+ * No glassmorphism. Hard offset shadows. Solid surfaces only.
  */
+
 :root {
-  /* ── Aqua Brand Palette ── */
-  --aqua-ocean:    #49C6E5;   /* Ocean Blue  */
-  --aqua-electric: #54DEFD;   /* Electric Ice */
-  --aqua-soft-white: #FFFBFA; /* Soft White — kept for wave compat only, do not use on UI surfaces */
-  --aqua-jade:     #00BD9D;   /* Jade Teal   */
-  --aqua-sea:      #8BD7D2;   /* Sea Glass   */
+  /* ── Fonts ── */
+  --font-headline: 'Alata', sans-serif;
+  --font-body:     'Instrument Sans', sans-serif;
+  --font-mono:     'Red Hat Mono', monospace;
 
-  /* ── Surface Colors — cool cyan/slate only (raised opacity 0.88–0.96) ── */
-  --bg-primary:    #C8E8F2;
-  --bg-secondary:  #AEDAE9;
-  --bg-tertiary:   #96CCDE;
-  --bg-elevated:   #7DBFD4;
-  --bg-card:       rgba(10, 44, 66, 0.90);
-  --bg-card-hover: rgba(12, 48, 74, 0.96);
-  --bg-modal-backdrop: rgba(6, 20, 32, 0.70);
+  /* ── Blueprint Canvas ── */
+  --canvas-bg:          #090d14;
+  --grid-minor:         #142033;
+  --grid-major:         #1e314d;
 
-  /* ── Glassmorphism Tokens — deep cool glass ── */
-  --glass-bg:          rgba(10, 44, 66, 0.90);
-  --glass-bg-subtle:   rgba(8, 36, 56, 0.88);
-  --glass-border:      rgba(84, 222, 253, 0.28);
-  --glass-border-aqua: rgba(73, 198, 229, 0.52);
-  --glass-border-focus: rgba(0, 189, 157, 0.70);
-  --glass-blur:        blur(24px);
-  --glass-shadow:      0 12px 40px rgba(4, 16, 28, 0.55), 0 2px 10px rgba(73, 198, 229, 0.18);
-  --glass-shadow-hover: 0 18px 52px rgba(4, 16, 28, 0.65), 0 4px 16px rgba(73, 198, 229, 0.26);
-  --glass-glow:        0 0 0 1px rgba(73, 198, 229, 0.38);
+  /* ── Opaque Surfaces ── */
+  --surface:            #0d131d;
+  --surface-container:  #131b29;
+  --surface-variant:    #1a2436;
+  --matte-black:        #070a0f;
 
-  /* ── Primary Brand & Accents ── */
-  --brand-primary:       var(--aqua-ocean);
-  --brand-primary-hover: #3AB4D2;
-  --brand-primary-glow:  rgba(73, 198, 229, 0.40);
-  --brand-accent:        var(--aqua-jade);
-  --brand-accent-glow:   rgba(0, 189, 157, 0.35);
-  --brand-secondary:     var(--aqua-sea);
+  /* ── Primary / Ripple ── */
+  --cobalt:             #1d63ff;
+  --cobalt-dim:         #1550d4;
 
-  /* ── Workflow State Colors ── */
-  --status-pending:        #7BA8BE;
-  --status-pending-bg:     rgba(73, 140, 175, 0.18);
-  --status-pending-border: rgba(73, 140, 175, 0.38);
+  /* ── Accent ── */
+  --cyan:               #22d3ee;
+  --ice-blue:           #93d5ff;
+  --white:              #ffffff;
 
-  --status-running:        #38C8F0;
-  --status-running-bg:     rgba(14, 165, 233, 0.18);
-  --status-running-border: rgba(14, 165, 233, 0.46);
-  --status-running-glow:   rgba(14, 165, 233, 0.32);
+  /* ── Status Colors ── */
+  --success:            #10b981;
+  --success-container:  #09291e;
+  --success-text:       #6ee7b7;
+  --warning:            #f59e0b;
+  --warning-container:  #2b1c06;
+  --warning-text:       #fde68a;
+  --error:              #ef4444;
+  --error-container:    #2b0d12;
+  --error-text:         #fecaca;
+  --info:               #1d63ff;
 
-  --status-waiting:        #F59E0B;
-  --status-waiting-bg:     rgba(245, 158, 11, 0.16);
-  --status-waiting-border: rgba(245, 158, 11, 0.42);
-  --status-waiting-glow:   rgba(245, 158, 11, 0.30);
+  /* ── Text ── */
+  --text-primary:       #e2eaf4;
+  --text-secondary:     #8899b4;
+  --text-muted:         #4f637a;
+  --text-ice:           #93d5ff;
 
-  --status-succeeded:        var(--aqua-jade);
-  --status-succeeded-bg:     rgba(0, 189, 157, 0.16);
-  --status-succeeded-border: rgba(0, 189, 157, 0.42);
-  --status-succeeded-glow:   rgba(0, 189, 157, 0.32);
+  /* ── Borders ── */
+  --outline:            #2a374d;
+  --outline-bright:     #475b7d;
 
-  --status-failed:        #F43F5E;
-  --status-failed-bg:     rgba(244, 63, 94, 0.16);
-  --status-failed-border: rgba(244, 63, 94, 0.40);
-  --status-failed-glow:   rgba(244, 63, 94, 0.28);
-
-  /* ── Typography — cool slate tones only ── */
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
-
-  --text-primary:   #F0FAFF;
-  --header-title:   #F0FAFF;
-  --text-body:      #C8E8F2;
-  --text-secondary: #90C4D8;
-  --text-muted:     #6499B2;
-  --text-disabled:  #3E6A82;
-
-  /* ── Borders & Dividers — cool cyan only ── */
-  --border-subtle:  rgba(73, 198, 229, 0.22);
-  --border-default: rgba(73, 198, 229, 0.40);
-  --border-strong:  rgba(73, 198, 229, 0.62);
-  --border-aqua:    rgba(73, 198, 229, 0.80);
-
-  /* ── Radii ── */
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-full: 9999px;
+  /* ── Hard Drop Shadows (no blur) ── */
+  --shadow-panel:       6px 6px 0px #030508;
+  --shadow-card:        4px 4px 0px #030508;
+  --shadow-btn:         3px 3px 0px #030508;
 
   /* ── Spacing ── */
-  --space-1:  0.25rem;
-  --space-2:  0.5rem;
-  --space-3:  0.75rem;
-  --space-4:  1rem;
-  --space-5:  1.25rem;
-  --space-6:  1.5rem;
-  --space-8:  2rem;
-  --space-10: 2.5rem;
-  --space-12: 3rem;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* ── Radii ── */
+  --radius-xs:  3px;
+  --radius-sm:  5px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
 
   /* ── Transitions ── */
-  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 260ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-fast: 120ms ease;
 }

@@ -4,80 +4,62 @@ import WorkflowCommandBar from './components/WorkflowCommandBar';
 import WorkflowInstances from './components/WorkflowInstances';
 import ProgressIndicator from './components/ProgressIndicator';
 import StepTimeline from './components/StepTimeline';
-import GlassPanel from './components/GlassPanel';
-import AquaMeshBackground from './components/AquaMeshBackground';
 import { useWorkflowPolling } from './hooks/useWorkflowPolling';
 import { liveApi, demoApi } from './services/api';
 import { MOCK_INSTANCES } from './data/mockData';
-import { AlertTriangle, Code, Terminal, Zap, Waves } from 'lucide-react';
+import { AlertTriangle, Zap, Code, Terminal, Plus, ArrowRight } from 'lucide-react';
 import './styles/global.css';
 import './styles/dashboard.css';
 
 const LOCAL_STORAGE_KEY = 'pst_ad_165_tracked_instances';
 
 export default function App() {
-  // Mode state: live backend vs interactive demo mode
-  const [isDemoMode, setIsDemoMode] = useState(() => {
-    return localStorage.getItem('pst_ad_165_demo_mode') === 'true';
-  });
+  /* ── Mode ── */
+  const [isDemoMode, setIsDemoMode] = useState(
+    () => localStorage.getItem('pst_ad_165_demo_mode') === 'true'
+  );
+  const [backendConnected, setBackendConnected]   = useState(false);
+  const [checkingHealth,   setCheckingHealth]     = useState(false);
 
-  const [backendConnected, setBackendConnected] = useState(false);
-  const [checkingHealth, setCheckingHealth] = useState(false);
-
-  // Tracked instances for Live Mode (persisted in localStorage)
+  /* ── Tracked instances (live mode) ── */
   const [trackedInstances, setTrackedInstances] = useState(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
+    } catch { return []; }
   });
 
-  // Active instance selection
-  const [activeInstanceId, setActiveInstanceId] = useState(() => {
-    return isDemoMode
-      ? MOCK_INSTANCES[1].instanceId // default to instance waiting for approval
-      : trackedInstances[0]?.instanceId || null;
-  });
+  /* ── Active instance ── */
+  const [activeInstanceId, setActiveInstanceId] = useState(
+    () => isDemoMode
+      ? MOCK_INSTANCES[1].instanceId
+      : (trackedInstances[0]?.instanceId || null)
+  );
 
-  // Action states
-  const [isStarting, setIsStarting] = useState(false);
-  const [isRetrying, setIsRetrying] = useState(false);
+  /* ── UI action states ── */
+  const [isStarting,          setIsStarting]          = useState(false);
+  const [isRetrying,          setIsRetrying]          = useState(false);
   const [isSubmittingDecision, setIsSubmittingDecision] = useState(false);
-  const [showRawJson, setShowRawJson] = useState(false);
+  const [showRawJson,         setShowRawJson]         = useState(false);
 
-  // Polling hook
+  /* ── Polling ── */
   const {
-    instance,
-    loading: instanceLoading,
-    error: instanceError,
-    isPolling,
-    togglePause,
-    refresh,
-    pollingInterval,
-    setPollingInterval,
-    setInstance,
+    instance, loading: instanceLoading, error: instanceError,
+    isPolling, togglePause, refresh, pollingInterval, setPollingInterval, setInstance,
   } = useWorkflowPolling(activeInstanceId, isDemoMode, 2000);
 
-  // Save tracked instances to localStorage
+  /* ── Persist tracked instances ── */
   useEffect(() => {
-    try {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(trackedInstances));
-    } catch (e) {
-      console.error('Failed to save tracked instances', e);
-    }
+    try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(trackedInstances)); }
+    catch (e) { console.error('Failed to save tracked instances', e); }
   }, [trackedInstances]);
 
-  // Persist demo mode choice
   useEffect(() => {
     localStorage.setItem('pst_ad_165_demo_mode', String(isDemoMode));
-    if (isDemoMode && !activeInstanceId) {
-      setActiveInstanceId(MOCK_INSTANCES[1].instanceId);
-    }
+    if (isDemoMode && !activeInstanceId) setActiveInstanceId(MOCK_INSTANCES[1].instanceId);
   }, [isDemoMode, activeInstanceId]);
 
-  // Backend health check probe
+  /* ── Health check ── */
   const checkHealth = useCallback(async () => {
     if (isDemoMode) return;
     setCheckingHealth(true);
@@ -92,64 +74,45 @@ export default function App() {
     return () => clearInterval(interval);
   }, [checkHealth]);
 
-  // Keep tracked instances updated with latest fetched state
+  /* ── Sync tracked instances with latest poll ── */
   useEffect(() => {
     if (instance && !isDemoMode) {
       setTrackedInstances((prev) => {
         const index = prev.findIndex((i) => i.instanceId === instance.instanceId);
+        const entry = {
+          instanceId: instance.instanceId,
+          workflowId: instance.workflowId,
+          status:     instance.status,
+          createdAt:  instance.createdAt,
+          updatedAt:  instance.updatedAt,
+        };
         if (index >= 0) {
           const updated = [...prev];
-          updated[index] = {
-            instanceId: instance.instanceId,
-            workflowId: instance.workflowId,
-            status: instance.status,
-            createdAt: instance.createdAt,
-            updatedAt: instance.updatedAt,
-          };
+          updated[index] = entry;
           return updated;
-        } else {
-          return [
-            {
-              instanceId: instance.instanceId,
-              workflowId: instance.workflowId,
-              status: instance.status,
-              createdAt: instance.createdAt,
-              updatedAt: instance.updatedAt,
-            },
-            ...prev,
-          ];
         }
+        return [entry, ...prev];
       });
     }
   }, [instance, isDemoMode]);
 
-  // Handlers
+  /* ── Handlers ── */
   const handleStartWorkflow = async () => {
     setIsStarting(true);
     try {
       const api = isDemoMode ? demoApi : liveApi;
       const res = await api.startWorkflow('PST_AD_165');
       const newId = res.instanceId;
-
       if (!isDemoMode) {
-        setTrackedInstances((prev) => [
-          {
-            instanceId: newId,
-            workflowId: 'PST_AD_165',
-            status: 'pending',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-          ...prev,
-        ]);
+        setTrackedInstances((prev) => [{
+          instanceId: newId, workflowId: 'PST_AD_165', status: 'pending',
+          createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+        }, ...prev]);
       }
-
       setActiveInstanceId(newId);
     } catch (err) {
       alert(`Failed to start workflow: ${err.message}`);
-    } finally {
-      setIsStarting(false);
-    }
+    } finally { setIsStarting(false); }
   };
 
   const handleRetryWorkflow = async () => {
@@ -159,11 +122,8 @@ export default function App() {
       const api = isDemoMode ? demoApi : liveApi;
       await api.retryWorkflow(activeInstanceId);
       await refresh();
-    } catch (err) {
-      alert(`Retry failed: ${err.message}`);
-    } finally {
-      setIsRetrying(false);
-    }
+    } catch (err) { alert(`Retry failed: ${err.message}`); }
+    finally { setIsRetrying(false); }
   };
 
   const handleApproveStep = async (stepId, decision) => {
@@ -173,29 +133,17 @@ export default function App() {
       const api = isDemoMode ? demoApi : liveApi;
       await api.approveStep(activeInstanceId, stepId, decision);
       await refresh();
-    } catch (err) {
-      alert(`Approval decision failed: ${err.message}`);
-      throw err;
-    } finally {
-      setIsSubmittingDecision(false);
-    }
+    } catch (err) { alert(`Approval decision failed: ${err.message}`); throw err; }
+    finally { setIsSubmittingDecision(false); }
   };
 
   const handleTrackInstanceId = (id) => {
     if (!id) return;
-    if (!isDemoMode) {
-      if (!trackedInstances.some((i) => i.instanceId === id)) {
-        setTrackedInstances((prev) => [
-          {
-            instanceId: id,
-            workflowId: 'PST_AD_165',
-            status: 'pending',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-          ...prev,
-        ]);
-      }
+    if (!isDemoMode && !trackedInstances.some((i) => i.instanceId === id)) {
+      setTrackedInstances((prev) => [{
+        instanceId: id, workflowId: 'PST_AD_165', status: 'pending',
+        createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+      }, ...prev]);
     }
     setActiveInstanceId(id);
   };
@@ -208,16 +156,35 @@ export default function App() {
     }
   };
 
-  // Instances to display in the sidebar
   const displayedInstances = isDemoMode ? MOCK_INSTANCES : trackedInstances;
 
   return (
-    <div className="app-container">
-      {/* Fixed canvas background — must be first child so z-index stacking is correct */}
-      <AquaMeshBackground />
-      {/* Backdrop tint overlay: deepens wave canvas without altering AquaMeshBackground.jsx */}
-      <div className="mesh-backdrop-overlay" aria-hidden="true" />
+    <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Blueprint grid canvas (fixed behind everything) */}
+      <div className="bp-canvas" />
 
+      {/* Top coordinate ruler */}
+      <div className="bp-ruler" style={{ zIndex: 60, position: 'relative' }}>
+        <span className="bp-tick-accent">+ 000.0</span>
+        <span>|</span>
+        <span>SYS.GRID // 16:9</span>
+        <span>|</span>
+        <span className="bp-tick-accent">+ 280.0</span>
+        <span>|</span>
+        <span className="bp-tick-accent">+ 560.0</span>
+        <span>|</span>
+        <span>ARCH.REV.4</span>
+        <span>|</span>
+        <span className="bp-tick-accent">+ 840.0</span>
+        <span>|</span>
+        <span className="bp-tick-accent">+ 1120.0</span>
+        <span>|</span>
+        <span className="bp-tick-accent">+ 1400.0</span>
+        <span>|</span>
+        <span className="bp-tick-accent">+ 1600.0</span>
+      </div>
+
+      {/* Header */}
       <Header
         isDemoMode={isDemoMode}
         setIsDemoMode={setIsDemoMode}
@@ -226,45 +193,49 @@ export default function App() {
         onCheckHealth={checkHealth}
       />
 
-      <main className="dashboard-main">
-        {/* Offline backend warning banner in Live Mode */}
+      {/* Main content */}
+      <main className="bp-main">
+
+        {/* Backend offline banner (live mode only) */}
         {!isDemoMode && !backendConnected && (
-          <div className="backend-banner">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
-              <AlertTriangle size={18} color="#E11D48" />
+          <div className="bp-banner bp-banner-error">
+            <div className="bp-banner-left">
+              <AlertTriangle size={16} color="#ef4444" />
               <span>
-                <strong>Backend Offline:</strong> Unable to connect to Flask server on{' '}
-                <code>http://127.0.0.1:5000</code>. Start with{' '}
-                <code>python3 app.py</code> or switch to Demo Mode.
+                <strong>Backend Offline:</strong> Unable to connect to Flask on{' '}
+                <code style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>
+                  http://127.0.0.1:5000
+                </code>.
+                Start with <code style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>python3 app.py</code> or switch to Demo Mode.
               </span>
             </div>
-            <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-              <button className="btn btn-secondary btn-sm" onClick={checkHealth} disabled={checkingHealth}>
-                Retry Connection
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button className="bp-btn bp-btn-secondary bp-btn-sm" onClick={checkHealth} disabled={checkingHealth}>
+                Retry
               </button>
-              <button className="btn btn-primary btn-sm" onClick={() => setIsDemoMode(true)}>
+              <button className="bp-btn bp-btn-primary bp-btn-sm" onClick={() => setIsDemoMode(true)}>
                 Switch to Demo Mode
               </button>
             </div>
           </div>
         )}
 
-        {/* Demo Mode banner */}
+        {/* Demo mode banner */}
         {isDemoMode && (
-          <div className="backend-banner demo-active">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
-              <Zap size={18} color="#D97706" />
+          <div className="bp-banner">
+            <div className="bp-banner-left">
+              <Zap size={15} color="#f59e0b" />
               <span>
                 <strong>Demo Mode Active:</strong> Workflow execution, approval gates, and retries are simulated in-browser. Live backend calls are disabled.
               </span>
             </div>
-            <button className="btn btn-secondary btn-sm" onClick={() => setIsDemoMode(false)}>
+            <button className="bp-btn bp-btn-secondary bp-btn-sm" onClick={() => setIsDemoMode(false)}>
               Switch to Live Mode
             </button>
           </div>
         )}
 
-        {/* Command Bar */}
+        {/* Command bar */}
         <WorkflowCommandBar
           instance={instance}
           onStartWorkflow={handleStartWorkflow}
@@ -279,12 +250,26 @@ export default function App() {
           setPollingInterval={setPollingInterval}
         />
 
-        {/* Progress strip */}
+        {/* 4-column summary strip with Ripple #1 */}
         <ProgressIndicator instance={instance} />
 
-        {/* Main 65/33 grid */}
-        <div className="dashboard-grid">
-          {/* LEFT — Workflow Instances table */}
+        {/* EXECUTION_SPLIT divider */}
+        <div className="bp-split-divider">
+          <div className="bp-split-divider-line" />
+          <span className="bp-split-divider-label">--[+ 02 // EXECUTION_SPLIT +]--</span>
+          <div className="bp-split-divider-icon">
+            <Plus size={11} color="#22d3ee" />
+          </div>
+          <div className="bp-split-divider-line" />
+          <div style={{ display: 'flex', alignItems: 'center', color: '#22d3ee' }}>
+            <ArrowRight size={12} />
+          </div>
+        </div>
+
+        {/* Bottom 2-column split */}
+        <div className="bp-bottom-grid">
+
+          {/* LEFT: instances table with Ripple #2 */}
           <WorkflowInstances
             instances={displayedInstances}
             activeInstanceId={activeInstanceId}
@@ -294,88 +279,115 @@ export default function App() {
             isDemoMode={isDemoMode}
           />
 
-          {/* RIGHT — Step Timeline inspector */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-            <GlassPanel
-              header={
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Waves size={15} color="var(--aqua-ocean)" />
-                  <span>Step Execution Graph</span>
-                  {instance && (
-                    <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-                      · {instance.workflowId}
-                    </span>
-                  )}
+          {/* RIGHT: step execution graph with Ripple #3 */}
+          <div className="bp-ripple-card">
+            <div className="bp-ripple-bg-right" />
+            <div className="bp-ripple-inner">
+              {/* Card header */}
+              <div className="bp-card-header">
+                <div className="bp-card-header-left">
+                  {/* Grid icon for step graph */}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <rect x="1" y="1" width="4" height="4" stroke="#22d3ee" strokeWidth="1.3" />
+                    <rect x="9" y="1" width="4" height="4" stroke="#22d3ee" strokeWidth="1.3" />
+                    <rect x="1" y="9" width="4" height="4" stroke="#22d3ee" strokeWidth="1.3" />
+                    <rect x="9" y="9" width="4" height="4" stroke="#22d3ee" strokeWidth="1.3" />
+                    <line x1="7" y1="3" x2="9" y2="3" stroke="#22d3ee" strokeWidth="1" />
+                    <line x1="5" y1="11" x2="9" y2="11" stroke="#22d3ee" strokeWidth="1" />
+                    <line x1="3" y1="5" x2="3" y2="9" stroke="#22d3ee" strokeWidth="1" />
+                    <line x1="11" y1="5" x2="11" y2="9" stroke="#22d3ee" strokeWidth="1" />
+                  </svg>
+                  <span className="bp-card-title">
+                    Step Execution Graph
+                    {instance && (
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 10,
+                          color: 'var(--text-muted)',
+                          marginLeft: 6,
+                        }}
+                      >
+                        · {instance.workflowId}
+                      </span>
+                    )}
+                  </span>
                 </div>
-              }
-              actions={
-                instance && (
+                {instance && (
                   <button
-                    className="btn btn-secondary btn-sm"
-                    onClick={() => setShowRawJson((prev) => !prev)}
+                    className="bp-btn bp-btn-secondary bp-btn-sm"
+                    onClick={() => setShowRawJson((p) => !p)}
                   >
-                    <Code size={13} />
-                    <span>{showRawJson ? 'Hide JSON' : 'Inspect JSON'}</span>
+                    <Code size={12} />
+                    {showRawJson ? 'Hide JSON' : 'Inspect JSON'}
                   </button>
-                )
-              }
-            >
+                )}
+              </div>
+
+              {/* API error */}
               {instanceError && (
                 <div
                   style={{
-                    padding: 'var(--space-4)',
-                    background: 'rgba(42, 16, 26, 0.90)',
-                    border: '1px solid rgba(244, 63, 94, 0.40)',
+                    margin: '10px 12px',
+                    padding: '8px 10px',
+                    background: 'var(--error-container)',
+                    border: '1.5px solid var(--error)',
                     borderRadius: 'var(--radius-sm)',
-                    color: '#FDA4AF',
-                    marginBottom: 'var(--space-4)',
-                    fontSize: 13,
+                    color: 'var(--error-text)',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 11,
+                    boxShadow: 'var(--shadow-card)',
                   }}
                 >
                   <strong>API Error:</strong> {instanceError}
                 </div>
               )}
 
+              {/* Step timeline */}
               <StepTimeline
                 instance={instance}
                 onApproveStep={handleApproveStep}
                 isSubmittingDecision={isSubmittingDecision}
               />
-            </GlassPanel>
 
-            {/* Raw JSON inspector */}
-            {showRawJson && instance && (
-              <GlassPanel
-                subtle
-                header={
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Terminal size={14} color="var(--text-secondary)" />
-                    <span style={{ color: 'var(--text-secondary)', fontSize: 13 }}>
-                      Raw State · state.json
-                    </span>
+              {/* Raw JSON inspector */}
+              {showRawJson && instance && (
+                <div style={{ padding: '0 10px 10px' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      padding: '8px 2px 4px',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 10,
+                      color: 'var(--text-muted)',
+                      borderTop: '1px solid var(--outline)',
+                      marginBottom: 6,
+                    }}
+                  >
+                    <Terminal size={11} />
+                    Raw State · state.json
                   </div>
-                }
-              >
-                <pre
-                  style={{
-                    maxHeight: 320,
-                    overflow: 'auto',
-                    fontSize: 12,
-                    fontFamily: 'var(--font-mono)',
-                    color: '#C8E8F2',
-                    background: 'rgba(6, 26, 40, 0.94)',
-                    padding: 'var(--space-3)',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid rgba(73,198,229,0.32)',
-                  }}
-                >
-                  {JSON.stringify(instance, null, 2)}
-                </pre>
-              </GlassPanel>
-            )}
+                  <pre className="bp-json-inspector">
+                    {JSON.stringify(instance, null, 2)}
+                  </pre>
+                </div>
+              )}
+            </div>
           </div>
+
         </div>
       </main>
+
+      {/* Bottom coordinate ruler */}
+      <div className="bp-ruler bp-ruler-bottom" style={{ zIndex: 60, position: 'relative' }}>
+        <span className="bp-tick-accent">[COORD Y:0900]</span>
+        <span>|</span>
+        <span>BLUEPRINT_LAYER_01 // NO_TRANSLUCENCY</span>
+        <span>|</span>
+        <span className="bp-tick-accent">[X:1600 Y:0900]</span>
+      </div>
     </div>
   );
 }
