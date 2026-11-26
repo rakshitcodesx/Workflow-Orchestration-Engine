@@ -37,9 +37,9 @@ export default function WorkflowInstances({
   };
 
   return (
-    <div className="bp-ripple-card">
+    <div className="bp-ripple-card" style={{ height: '100%' }}>
       <div className="bp-ripple-bg-left" />
-      <div className="bp-ripple-inner">
+      <div className="bp-ripple-inner" style={{ flex: 1, height: 'auto' }}>
         {/* Card header */}
         <div className="bp-card-header">
           <div className="bp-card-header-left">

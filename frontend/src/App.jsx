@@ -173,26 +173,22 @@ export default function App() {
       {/* ── Outer Blueprint Canvas Grid (Fixed) ── */}
       <div className="bp-canvas" aria-hidden="true" />
 
-      {/* ── Outer Blueprint Corner Accents (Fixed overlays) ── */}
+      {/* ── Outer Blueprint Corner Accents (Fixed overlays pinned symmetrically to 12px corners) ── */}
       <div className="bp-corner-accent bp-corner-tl" aria-hidden="true">
-        <span className="bp-corner-plus">+</span>
         <div className="bp-corner-bracket-tl" />
-        <span className="bp-corner-arrow">↓</span>
       </div>
       <div className="bp-corner-accent bp-corner-tr" aria-hidden="true">
         <div className="bp-corner-bracket-tr" />
-        <span className="bp-corner-hatches">///</span>
       </div>
       <div className="bp-corner-accent bp-corner-bl" aria-hidden="true">
         <div className="bp-corner-bracket-bl" />
       </div>
       <div className="bp-corner-accent bp-corner-br" aria-hidden="true">
         <div className="bp-corner-bracket-br" />
-        <span className="bp-corner-sparkle">✦</span>
       </div>
 
       {/* ── 1. Top Coordinate Ruler (horizontal insets clear corner brackets) ── */}
-      <div className="bp-ruler" aria-hidden="true" style={{ paddingLeft: '48px', paddingRight: '48px' }}>
+      <div className="bp-ruler" aria-hidden="true" style={{ paddingLeft: '56px', paddingRight: '56px' }}>
         <span className="bp-tick-accent">+ 000.0</span>
         <span>|</span>
         <span>SYS.GRID // 16:9</span>
@@ -367,7 +363,7 @@ export default function App() {
       </main>
 
       {/* ── 4. Bottom Coordinate Ruler (horizontal insets clear corner brackets) ── */}
-      <div className="bp-ruler bp-ruler-bottom" aria-hidden="true" style={{ paddingLeft: '48px', paddingRight: '48px' }}>
+      <div className="bp-ruler bp-ruler-bottom" aria-hidden="true" style={{ paddingLeft: '56px', paddingRight: '56px' }}>
         <span className="bp-tick-accent">[COORD Y:0900]</span>
         <span style={{ margin: '0 auto' }}>BLUEPRINT_LAYER_01 // NO_TRANSLUCENCY</span>
         <span className="bp-tick-accent">[X:1600 Y:0900]</span>
