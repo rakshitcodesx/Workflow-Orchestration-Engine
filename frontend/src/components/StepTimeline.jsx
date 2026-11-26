@@ -78,9 +78,9 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
 
         return (
           <React.Fragment key={step.stepId}>
-            <div className="bp-step-row">
-              {/* Node + connector */}
-              <div className="bp-step-node-col">
+            <div className={cardClass(step.status)}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                {/* Node icon inside card on left */}
                 <div
                   className={`${nodeClass(step.status)}${isRunning ? ' animate-pulse-cobalt' : ''}${isWaiting ? ' animate-pulse-warning' : ''}`}
                 >
@@ -96,12 +96,9 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                     idx + 1
                   )}
                 </div>
-                {!isLast && <div className={connectorClass(step.status)} style={{ flex: 1, minHeight: showWalBadge ? 10 : 20 }} />}
-              </div>
 
-              {/* Step card */}
-              <div className="bp-step-card-col">
-                <div className={cardClass(step.status)}>
+                {/* Step content */}
+                <div style={{ flex: 1, minWidth: 0 }}>
                   {/* Title row */}
                   <div className="bp-step-title-row">
                     <div>

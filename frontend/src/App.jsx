@@ -349,8 +349,8 @@ export default function App() {
           {/* Right: Step Execution Graph with Isolated Cobalt/Black Ripple Container */}
           <div className="bp-ripple-card-right">
             <div className="bp-ripple-inner-right">
-              {/* Card Header */}
-              <div className="bp-card-header">
+              {/* Standalone Header Card Over Ripples */}
+              <div className="bp-graph-header">
                 <div className="bp-card-header-left">
                   <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="#22d3ee" strokeWidth="1.5">
                     <rect x="2" y="2" width="4" height="4" rx="0.5" />
@@ -393,7 +393,7 @@ export default function App() {
 
               {/* Raw JSON State Inspector */}
               {showRawJson && instance && (
-                <div style={{ padding: '0 8px 8px' }}>
+                <div className="bp-json-card">
                   <div className="bp-json-header">
                     <Terminal size={11} />
                     <span>Raw State · state.json</span>
