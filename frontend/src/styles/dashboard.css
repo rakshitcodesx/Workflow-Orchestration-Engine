@@ -189,25 +189,6 @@
   content: none !important;
 }
 
-.bp-hub-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  height: 32px;
-  width: auto;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-.bp-logo-mark {
-  display: block;
-  height: 32px;
-  width: auto;
-  overflow: visible;
-}
-
 .bp-header-title {
   font-family: var(--font-headline);
   font-size: 38px;
@@ -237,9 +218,30 @@
 
 .bp-header-right {
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.bp-header-logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 26px;
+}
+
+.bp-header-actions-row {
+  display: flex;
   align-items: center;
   gap: 8px;
-  flex-shrink: 0;
+}
+
+.bp-logo-mark {
+  display: block;
+  height: 26px;
+  width: auto;
+  overflow: visible;
 }
 
 .bp-header-hatch {

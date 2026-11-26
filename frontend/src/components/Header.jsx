@@ -10,12 +10,18 @@ import React from 'react';
 export default function Header({ isDemoMode, setIsDemoMode, backendConnected, checkingHealth, onCheckHealth }) {
   return (
     <header className="bp-header">
-      {/* ── Left: Hub Badge + Large Title ── */}
+      {/* ── Left: Clean Title ── */}
       <div className="bp-header-left">
-        <div className="bp-hub-badge" title="Workflow Orchestration Engine">
+        <h1 className="bp-header-title">Workflow Orchestration Engine</h1>
+      </div>
+
+      {/* ── Right: Logo Mark Above Demo Button + Button Group ── */}
+      <div className="bp-header-right">
+        {/* Cobalt W + Cyan Circuit Mark positioned directly above the Demo button */}
+        <div className="bp-header-logo-row" title="Workflow Orchestration Engine">
           <svg
-            width="42"
-            height="32"
+            width="36"
+            height="26"
             viewBox="0 0 36 28"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -111,54 +117,52 @@ export default function Header({ isDemoMode, setIsDemoMode, backendConnected, ch
           </svg>
         </div>
 
-        <h1 className="bp-header-title">Workflow Orchestration Engine</h1>
-      </div>
+        {/* Buttons Row: ///, ??, Live, Demo */}
+        <div className="bp-header-actions-row">
+          {/* Angled hatch accents above buttons */}
+          <div className="bp-header-hatch" aria-hidden="true">///</div>
 
-      {/* ── Right: Exactly 3 Matte-Black Buttons ── */}
-      <div className="bp-header-right">
-        {/* Angled hatch accents above buttons */}
-        <div className="bp-header-hatch" aria-hidden="true">///</div>
+          {/* 1. Help button: '??' */}
+          <button
+            className="bp-btn bp-btn-secondary bp-header-btn"
+            title="Help & Documentation"
+            aria-label="Help"
+            style={{ width: 34, height: 34, padding: 0, justifyContent: 'center' }}
+          >
+            ??
+          </button>
 
-        {/* 1. Help button: '??' */}
-        <button
-          className="bp-btn bp-btn-secondary bp-header-btn"
-          title="Help & Documentation"
-          aria-label="Help"
-          style={{ width: 34, height: 34, padding: 0, justifyContent: 'center' }}
-        >
-          ??
-        </button>
-
-        {/* 2. Live pill button with status dot */}
-        <button
-          className={`bp-btn bp-btn-secondary bp-header-btn${!isDemoMode ? ' bp-header-btn-active-live' : ''}`}
-          onClick={() => {
-            setIsDemoMode(false);
-            onCheckHealth?.();
-          }}
-          title="Live Backend Connection"
-        >
-          <span
-            style={{
-              width: 7,
-              height: 7,
-              borderRadius: '50%',
-              background: !isDemoMode && backendConnected ? '#10b981' : isDemoMode ? '#10b981' : '#ef4444',
-              display: 'inline-block',
-              flexShrink: 0,
+          {/* 2. Live pill button with status dot */}
+          <button
+            className={`bp-btn bp-btn-secondary bp-header-btn${!isDemoMode ? ' bp-header-btn-active-live' : ''}`}
+            onClick={() => {
+              setIsDemoMode(false);
+              onCheckHealth?.();
             }}
-          />
-          <span>Live</span>
-        </button>
+            title="Live Backend Connection"
+          >
+            <span
+              style={{
+                width: 7,
+                height: 7,
+                borderRadius: '50%',
+                background: !isDemoMode && backendConnected ? '#10b981' : isDemoMode ? '#10b981' : '#ef4444',
+                display: 'inline-block',
+                flexShrink: 0,
+              }}
+            />
+            <span>Live</span>
+          </button>
 
-        {/* 3. Demo button */}
-        <button
-          className={`bp-btn bp-btn-secondary bp-header-btn${isDemoMode ? ' bp-header-btn-active-demo' : ''}`}
-          onClick={() => setIsDemoMode(true)}
-          title="Simulated Demo Mode"
-        >
-          <span>Demo</span>
-        </button>
+          {/* 3. Demo button */}
+          <button
+            className={`bp-btn bp-btn-secondary bp-header-btn${isDemoMode ? ' bp-header-btn-active-demo' : ''}`}
+            onClick={() => setIsDemoMode(true)}
+            title="Simulated Demo Mode"
+          >
+            <span>Demo</span>
+          </button>
+        </div>
       </div>
     </header>
   );
