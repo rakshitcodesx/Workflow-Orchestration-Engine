@@ -53,39 +53,81 @@
 }
 
 /* ════════════════════════════════════
-   3. FOUR CORNER RIGHT-ANGLE BRACKETS
+   3. FOUR CORNER RIGHT-ANGLE BRACKETS & ACCENTS
    ════════════════════════════════════ */
-.bp-corner-bracket {
+.bp-corner-accent {
   position: fixed;
   z-index: 70;
   pointer-events: none;
-  width: 16px;
-  height: 16px;
   box-sizing: border-box;
 }
 .bp-corner-tl {
-  top: 12px;
-  left: 12px;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.bp-corner-bracket-tl {
+  width: 22px;
+  height: 22px;
   border-top: 2px solid var(--cyan);
   border-left: 2px solid var(--cyan);
 }
+.bp-corner-arrow-down {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--cyan);
+  line-height: 1;
+  margin-top: 2px;
+  margin-left: -1px;
+}
+
 .bp-corner-tr {
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.bp-corner-bracket-tr {
+  width: 22px;
+  height: 22px;
   border-top: 2px solid var(--white);
   border-right: 2px solid var(--white);
 }
+.bp-corner-hatch {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--cyan);
+  font-weight: 700;
+  letter-spacing: -2px;
+  margin-top: 2px;
+  margin-right: 2px;
+}
+
 .bp-corner-bl {
-  bottom: 12px;
-  left: 12px;
+  bottom: 10px;
+  left: 10px;
+}
+.bp-corner-bracket-bl {
+  width: 16px;
+  height: 16px;
   border-bottom: 2px solid #475b7d;
   border-left: 2px solid #475b7d;
 }
+
 .bp-corner-br {
-  bottom: 12px;
-  right: 12px;
+  bottom: 10px;
+  right: 10px;
+}
+.bp-corner-bracket-br {
+  width: 16px;
+  height: 16px;
   border-bottom: 2px solid var(--cyan);
   border-right: 2px solid var(--cyan);
+}
+.bp-corner-star {
+  display: none;
 }
 
 /* ════════════════════════════════════
@@ -195,6 +237,16 @@
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+}
+
+.bp-header-hatch {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--white);
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  margin-right: 2px;
+  user-select: none;
 }
 
 .bp-header-btn {
@@ -423,6 +475,20 @@
   flex-shrink: 0;
 }
 
+.bp-split-divider-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bp-split-hatch {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cyan);
+  letter-spacing: -1px;
+}
+
 .bp-split-divider-label {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -436,6 +502,13 @@
   flex: 1;
   height: 1.5px;
   background: #2a3d5e;
+}
+
+.bp-split-center-tick {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: #475b7d;
 }
 
 .bp-split-divider-accents {
@@ -581,11 +654,40 @@
 .bp-filter-bar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: space-between;
+  gap: 8px;
   padding: 8px 14px;
   background: #0d131d;
   border-bottom: 1px solid var(--outline);
   flex-wrap: wrap;
+}
+
+.bp-filter-pills-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.bp-filter-search-form {
+  display: flex;
+  align-items: center;
+}
+
+.bp-filter-search-input {
+  width: 135px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  background: #070a0f;
+  border: 1px solid #475b7d;
+  border-radius: var(--radius-xs);
+  color: var(--text-primary);
+  box-shadow: 2px 2px 0px #030508;
+}
+.bp-filter-search-input:focus {
+  outline: none;
+  border-color: var(--cyan);
 }
 
 .bp-filter-pill {
@@ -870,8 +972,8 @@
 }
 
 .bp-error-box {
-  margin-top: 6px;
-  padding: 6px 10px;
+  margin-top: 8px;
+  padding: 8px 10px;
   background: var(--error-container);
   border: 1.5px solid var(--error);
   border-radius: var(--radius-sm);
@@ -879,6 +981,24 @@
   font-size: 11px;
   color: var(--error-text);
   box-shadow: 3px 3px 0px #030508;
+}
+
+.bp-error-detail-box {
+  margin-top: 6px;
+  padding: 8px 12px;
+  background: #070a0f;
+  border: 1px solid #2a3447;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #cbd5e1;
+  box-shadow: inset 1px 1px 0px #030508;
+}
+
+.bp-bottom-star {
+  font-size: 16px;
+  color: #93d5ff;
+  line-height: 1;
 }
 
 .bp-api-error {

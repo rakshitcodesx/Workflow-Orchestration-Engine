@@ -46,14 +46,17 @@ export default function Header({ isDemoMode, setIsDemoMode, backendConnected, ch
 
       {/* ── Right: Exactly 3 Matte-Black Buttons ── */}
       <div className="bp-header-right">
-        {/* 1. Help button: single '?' character */}
+        {/* Angled hatch accents above buttons */}
+        <div className="bp-header-hatch" aria-hidden="true">///</div>
+
+        {/* 1. Help button: '??' */}
         <button
           className="bp-btn bp-btn-secondary bp-header-btn"
           title="Help & Documentation"
           aria-label="Help"
           style={{ width: 34, height: 34, padding: 0, justifyContent: 'center' }}
         >
-          ?
+          ??
         </button>
 
         {/* 2. Live pill button with status dot */}

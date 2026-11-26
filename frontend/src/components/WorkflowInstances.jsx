@@ -47,43 +47,37 @@ export default function WorkflowInstances({
         <div className="bp-card-header">
           <div className="bp-card-header-left">
             <span className="bp-card-title">
-              {isDemoMode ? 'Demo Workflows' : 'Workflow Instances'}
+              {isDemoMode ? `Demo Workflows (${instances.length})` : `Workflow Instances (${instances.length})`}
             </span>
-            <span className="bp-card-count-badge">{filtered.length}</span>
-            {isDemoMode && <span className="bp-queue-badge">QUEUE_ACTIVE</span>}
           </div>
 
-          {/* UUID lookup */}
-          <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 5 }}>
+          {isDemoMode && <span className="bp-queue-badge">QUEUE_ACTIVE</span>}
+        </div>
+
+        {/* Filter pills & search */}
+        <div className="bp-filter-bar">
+          <div className="bp-filter-pills-group">
+            {['all', 'running', 'completed', 'failed'].map((st) => (
+              <button
+                key={st}
+                className={`bp-filter-pill${filterStatus === st ? ' active' : ''}`}
+                onClick={() => setFilter(st)}
+              >
+                {st === 'all' ? 'All' : st.charAt(0).toUpperCase() + st.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          {/* UUID lookup on the right of the filter bar */}
+          <form onSubmit={handleSubmit} className="bp-filter-search-form">
             <input
               type="text"
-              className="bp-input"
+              className="bp-input bp-filter-search-input"
               placeholder="Lookup UUID..."
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
-              style={{ width: 140 }}
             />
-            <button
-              type="submit"
-              className="bp-btn bp-btn-secondary bp-btn-sm"
-              disabled={!inputVal.trim()}
-            >
-              <Search size={12} />
-            </button>
           </form>
-        </div>
-
-        {/* Filter pills */}
-        <div className="bp-filter-bar">
-          {['all', 'running', 'completed', 'failed'].map((st) => (
-            <button
-              key={st}
-              className={`bp-filter-pill${filterStatus === st ? ' active' : ''}`}
-              onClick={() => setFilter(st)}
-            >
-              {st === 'all' ? 'All' : st.charAt(0).toUpperCase() + st.slice(1)}
-            </button>
-          ))}
         </div>
 
         {/* Table */}

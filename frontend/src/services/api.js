@@ -142,8 +142,11 @@ class DemoApiStore {
   }
 
   async getWorkflow(instanceId) {
-    await new Promise((r) => setTimeout(r, 120));
-    const inst = this.instances.find((i) => i.instanceId === instanceId);
+    await new Promise((r) => setTimeout(r, 60));
+    let inst = this.instances.find((i) => i.instanceId === instanceId);
+    if (!inst) {
+      inst = MOCK_INSTANCES.find((i) => i.instanceId === instanceId) || this.instances[1] || this.instances[0];
+    }
     if (!inst) {
       const err = new Error('Instance not found.');
       err.status = 404;

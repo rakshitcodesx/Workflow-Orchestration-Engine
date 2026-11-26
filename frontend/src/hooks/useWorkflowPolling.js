@@ -43,7 +43,11 @@ export function useWorkflowPolling(instanceId, isDemoMode = false, defaultInterv
         }
       } catch (err) {
         if (isMountedRef.current) {
-          setError(err.message || 'Failed to fetch workflow state.');
+          if (isDemoMode) {
+            setError(null);
+          } else {
+            setError(err.message || 'Failed to fetch workflow state.');
+          }
         }
       } finally {
         if (isMountedRef.current && isManualRefresh) {

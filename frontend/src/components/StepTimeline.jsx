@@ -160,12 +160,15 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                     </div>
                   )}
 
-                  {/* Error box — single compact line, no duplicate text */}
+                  {/* Error box with header and detail container */}
                   {step.lastError && (
                     <div className="bp-error-box">
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600, fontSize: 11 }}>
                         <AlertTriangle size={12} color="#ef4444" style={{ flexShrink: 0 }} />
                         <span>Last error: {step.lastError}</span>
+                      </div>
+                      <div className="bp-error-detail-box">
+                        {step.lastError}
                       </div>
                     </div>
                   )}

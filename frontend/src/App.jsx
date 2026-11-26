@@ -173,11 +173,22 @@ export default function App() {
       {/* ── Fixed Blueprint Canvas Grid ── */}
       <div className="bp-canvas" aria-hidden="true" />
 
-      {/* ── 4 Right-Angle Corner Brackets Pinned at 12px ── */}
-      <div className="bp-corner-bracket bp-corner-tl" aria-hidden="true" />
-      <div className="bp-corner-bracket bp-corner-tr" aria-hidden="true" />
-      <div className="bp-corner-bracket bp-corner-bl" aria-hidden="true" />
-      <div className="bp-corner-bracket bp-corner-br" aria-hidden="true" />
+      {/* ── 4 Right-Angle Corner Brackets & Accents Pinned at 12px ── */}
+      <div className="bp-corner-accent bp-corner-tl" aria-hidden="true">
+        <div className="bp-corner-bracket-tl" />
+        <div className="bp-corner-arrow-down">↓</div>
+      </div>
+      <div className="bp-corner-accent bp-corner-tr" aria-hidden="true">
+        <div className="bp-corner-bracket-tr" />
+        <div className="bp-corner-hatch">///</div>
+      </div>
+      <div className="bp-corner-accent bp-corner-bl" aria-hidden="true">
+        <div className="bp-corner-bracket-bl" />
+      </div>
+      <div className="bp-corner-accent bp-corner-br" aria-hidden="true">
+        <div className="bp-corner-bracket-br" />
+        <div className="bp-corner-star">✦</div>
+      </div>
 
       {/* ── Centered Blueprint Container (max-width: 1600px) ── */}
       <div className="bp-container">
@@ -272,7 +283,12 @@ export default function App() {
 
         {/* 6. Execution Split Divider */}
         <div className="bp-split-divider" aria-hidden="true">
-          <span className="bp-split-divider-label">--[+ 02 // EXECUTION_SPLIT +]--</span>
+          <div className="bp-split-divider-left">
+            <span className="bp-split-hatch">///</span>
+            <span className="bp-split-divider-label">--[+ 02 // EXECUTION_SPLIT +]--</span>
+          </div>
+          <div className="bp-split-divider-line" />
+          <div className="bp-split-center-tick">+</div>
           <div className="bp-split-divider-line" />
           <div className="bp-split-divider-accents">
             <span className="bp-split-accent-plus">+</span>
@@ -323,8 +339,8 @@ export default function App() {
                 )}
               </div>
 
-              {/* API error alert if any */}
-              {instanceError && (
+              {/* API error alert if any (Live mode only to prevent layout jump in demo) */}
+              {!isDemoMode && instanceError && (
                 <div className="bp-api-error">
                   <strong>API Error:</strong> {instanceError}
                 </div>
@@ -357,7 +373,10 @@ export default function App() {
         <div className="bp-ruler bp-ruler-bottom" aria-hidden="true">
           <span className="bp-tick-accent">[COORD Y:0900]</span>
           <span>BLUEPRINT_LAYER_01 // NO_TRANSLUCENCY</span>
-          <span className="bp-tick-accent">[X:1600 Y:0900]</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span className="bp-tick-accent">[X:1600 Y:0900]</span>
+            <span className="bp-bottom-star">✦</span>
+          </div>
         </div>
       </div>
     </div>

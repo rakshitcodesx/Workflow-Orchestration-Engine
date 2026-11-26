@@ -54,7 +54,7 @@ export default function WorkflowCommandBar({
 
         {/* 4. Atomic WAL & Zero-Token-Waste Recovery Badge */}
         <div className="bp-cmdbar-wal-badge">
-          <span style={{ color: '#22d3ee', marginRight: 4 }}>⊕</span>
+          <span style={{ color: '#22d3ee', marginRight: 5, fontSize: 13, lineHeight: 1 }}>✳</span>
           <span>Atomic WAL · Zero-Token-Waste Recovery</span>
         </div>
       </div>
