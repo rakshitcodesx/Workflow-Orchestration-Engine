@@ -46,7 +46,7 @@
   padding: 28px 32px 28px 32px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
   position: relative;
   z-index: 10;
   box-sizing: border-box;
@@ -148,7 +148,7 @@
 .bp-ruler-bottom {
   border-bottom: none;
   border-top: none;
-  margin-top: 12px;
+  margin-top: 0;
 }
 .bp-ruler span {
   font-family: var(--font-mono);
@@ -366,7 +366,7 @@
   border-radius: 10px;
   border: 1.5px solid #475b7d;
   box-shadow: 6px 6px 0px #030508;
-  padding: 18px 20px;
+  padding: 12px 14px;
   background-color: #070a0f;
   background-image: repeating-radial-gradient(
     circle at 84% 48%,
@@ -510,6 +510,7 @@
   align-items: stretch;
   flex: 1;
   min-height: 0;
+  margin-bottom: 26px;
 }
 @media (max-width: 1024px) {
   .bp-bottom-grid { grid-template-columns: 1fr; }
@@ -522,7 +523,7 @@
   border-radius: 10px;
   border: 1.5px solid #475b7d;
   box-shadow: 6px 6px 0px #030508;
-  padding: 18px 20px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
   background-color: #070a0f;
@@ -559,7 +560,7 @@
   border-radius: 10px;
   border: 1.5px solid #475b7d;
   box-shadow: 6px 6px 0px #030508;
-  padding: 18px 20px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
   background-color: #070a0f;
