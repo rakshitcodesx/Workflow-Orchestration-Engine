@@ -32,9 +32,19 @@ export default function App() {
   });
 
   /* ── Active instance ── */
-  const [activeInstanceId, setActiveInstanceId] = useState(
-    () => (isDemoMode ? MOCK_INSTANCES[1].instanceId : trackedInstances[0]?.instanceId || null)
-  );
+  const [activeInstanceId, setActiveInstanceId] = useState(() => {
+    const demo = localStorage.getItem('pst_ad_165_demo_mode') !== 'false';
+    if (demo) {
+      return MOCK_INSTANCES[1].instanceId;
+    }
+    try {
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const parsed = saved ? JSON.parse(saved) : [];
+      return parsed[0]?.instanceId || null;
+    } catch {
+      return null;
+    }
+  });
 
   /* ── UI action states ── */
   const [isStarting, setIsStarting] = useState(false);
@@ -50,11 +60,29 @@ export default function App() {
     isPolling,
     togglePause,
     refresh,
+    resetState: resetPollingState,
     pollingInterval,
     setPollingInterval,
   } = useWorkflowPolling(activeInstanceId, isDemoMode, 2000);
 
-  /* ── Persistence ── */
+  /* ── Mode Toggle Handler ── */
+  const handleSetMode = useCallback(
+    (toDemo) => {
+      setIsDemoMode(toDemo);
+      localStorage.setItem('pst_ad_165_demo_mode', String(toDemo));
+      resetPollingState?.();
+      if (toDemo) {
+        // Switching to Demo Mode: auto-select the active mock instance immediately
+        setActiveInstanceId(MOCK_INSTANCES[1].instanceId);
+      } else {
+        // Switching to Live Mode: immediately clear mock ID, switch to first live instance or null
+        setActiveInstanceId(trackedInstances[0]?.instanceId || null);
+      }
+    },
+    [trackedInstances, resetPollingState]
+  );
+
+  /* ── Persistence & Mode Safeguards ── */
   useEffect(() => {
     try {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(trackedInstances));
@@ -65,10 +93,19 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem('pst_ad_165_demo_mode', String(isDemoMode));
-    if (isDemoMode && !activeInstanceId) {
-      setActiveInstanceId(MOCK_INSTANCES[1].instanceId);
+    if (isDemoMode) {
+      const isMock = MOCK_INSTANCES.some((i) => i.instanceId === activeInstanceId);
+      if (!isMock) {
+        setActiveInstanceId(MOCK_INSTANCES[1].instanceId);
+      }
+    } else {
+      // Prevent any Demo mock ID from leaking into live mode
+      const isMock = MOCK_INSTANCES.some((i) => i.instanceId === activeInstanceId);
+      if (isMock) {
+        setActiveInstanceId(trackedInstances[0]?.instanceId || null);
+      }
     }
-  }, [isDemoMode, activeInstanceId]);
+  }, [isDemoMode, activeInstanceId, trackedInstances]);
 
   /* ── Health check ── */
   const checkHealth = useCallback(async () => {
@@ -220,7 +257,7 @@ export default function App() {
         {/* 2. Top Header Bar */}
         <Header
           isDemoMode={isDemoMode}
-          setIsDemoMode={setIsDemoMode}
+          setIsDemoMode={handleSetMode}
           backendConnected={backendConnected}
           checkingHealth={checkingHealth}
           onCheckHealth={checkHealth}
@@ -237,7 +274,7 @@ export default function App() {
             </div>
             <button
               className="bp-btn bp-btn-secondary bp-banner-btn"
-              onClick={() => setIsDemoMode(false)}
+              onClick={() => handleSetMode(false)}
             >
               Switch to Live Mode
             </button>
@@ -256,7 +293,7 @@ export default function App() {
               <button className="bp-btn bp-btn-secondary bp-btn-sm" onClick={checkHealth} disabled={checkingHealth}>
                 Retry
               </button>
-              <button className="bp-btn bp-btn-primary bp-btn-sm" onClick={() => setIsDemoMode(true)}>
+              <button className="bp-btn bp-btn-primary bp-btn-sm" onClick={() => handleSetMode(true)}>
                 Switch to Demo Mode
               </button>
             </div>
@@ -276,10 +313,11 @@ export default function App() {
           togglePause={togglePause}
           pollingInterval={pollingInterval}
           setPollingInterval={setPollingInterval}
+          isDemoMode={isDemoMode}
         />
 
         {/* 5. 4-Column Summary Strip With Thick Isolated Cobalt/Black Ripples */}
-        <ProgressIndicator instance={instance} />
+        <ProgressIndicator instance={instance} isDemoMode={isDemoMode} />
 
         {/* 6. Execution Split Divider */}
         <div className="bp-split-divider" aria-hidden="true">

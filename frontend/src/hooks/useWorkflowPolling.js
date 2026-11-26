@@ -19,12 +19,28 @@ export function useWorkflowPolling(instanceId, isDemoMode = false, defaultInterv
 
   const isMountedRef = useRef(true);
   const pollTimerRef = useRef(null);
+  const prevModeRef = useRef(isDemoMode);
+
+  // Clear stale data immediately whenever isDemoMode toggles
+  useEffect(() => {
+    if (prevModeRef.current !== isDemoMode) {
+      prevModeRef.current = isDemoMode;
+      setInstance(null);
+      setError(null);
+      setLoading(false);
+      if (pollTimerRef.current) clearTimeout(pollTimerRef.current);
+    }
+  }, [isDemoMode]);
 
   // Fetch workflow state
   const fetchInstance = useCallback(
     async (isManualRefresh = false) => {
       if (!instanceId) {
-        setInstance(null);
+        if (isMountedRef.current) {
+          setInstance(null);
+          setError(null);
+          setLoading(false);
+        }
         return;
       }
 
@@ -61,10 +77,17 @@ export function useWorkflowPolling(instanceId, isDemoMode = false, defaultInterv
   // Initial load when instanceId or isDemoMode changes
   useEffect(() => {
     isMountedRef.current = true;
+    if (pollTimerRef.current) clearTimeout(pollTimerRef.current);
+
     if (instanceId) {
       setLoading(true);
       fetchInstance(true);
+    } else {
+      setInstance(null);
+      setError(null);
+      setLoading(false);
     }
+
     return () => {
       isMountedRef.current = false;
       if (pollTimerRef.current) clearTimeout(pollTimerRef.current);
@@ -106,16 +129,24 @@ export function useWorkflowPolling(instanceId, isDemoMode = false, defaultInterv
     return fetchInstance(true);
   }, [fetchInstance]);
 
+  const resetState = useCallback(() => {
+    setInstance(null);
+    setError(null);
+    setLoading(false);
+    if (pollTimerRef.current) clearTimeout(pollTimerRef.current);
+  }, []);
+
   return {
     instance,
     loading,
     error,
-    isPolling: !isPollingPaused && pollingInterval > 0 && (!instance || !isTerminalWorkflow(instance.status)),
+    isPolling: !isPollingPaused && pollingInterval > 0 && Boolean(instanceId) && (!instance || !isTerminalWorkflow(instance.status)),
     isPollingPaused,
     pollingInterval,
     setPollingInterval,
     togglePause,
     refresh,
+    resetState,
     lastPolledAt,
     setInstance,
   };

@@ -19,11 +19,14 @@ export default function WorkflowCommandBar({
   isPolling,
   togglePause,
   pollingInterval,
+  isDemoMode = false,
 }) {
   const canRetry = instance?.status === 'failed';
   const displayId = instance?.instanceId
     ? abbreviateId(instance.instanceId, 8, 6)
-    : '3d88ef56-1...9a3201';
+    : isDemoMode
+    ? '3d88ef56-1...9a3201'
+    : '—';
 
   return (
     <div className="bp-cmdbar">
@@ -49,7 +52,14 @@ export default function WorkflowCommandBar({
         {/* 3. Active instance UUID badge */}
         <div className="bp-cmdbar-id-label">
           <span style={{ color: 'var(--text-muted)', marginRight: 4 }}>ID:</span>
-          <span style={{ color: '#93d5ff', fontWeight: 600 }}>{displayId}</span>
+          <span
+            style={{
+              color: displayId === '—' ? 'var(--text-muted)' : '#93d5ff',
+              fontWeight: 600,
+            }}
+          >
+            {displayId}
+          </span>
         </div>
 
         {/* 4. Atomic WAL & Zero-Token-Waste Recovery Badge */}
