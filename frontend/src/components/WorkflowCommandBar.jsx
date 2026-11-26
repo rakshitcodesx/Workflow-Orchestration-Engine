@@ -4,7 +4,9 @@ import { abbreviateId } from '../utils/formatters';
 
 /**
  * WorkflowCommandBar — Blueprint Dark Theme
- * Opaque surface container, cobalt "Run Workflow", active UUID pill, WAL badge, polling controls.
+ * Technical Specification Compliance:
+ *  - Left: PST_AD_165 v1.0.0, cobalt Run Workflow, active UUID pill, Atomic WAL badge
+ *  - Right: Poll: 2s badge, matte-black Pause, matte-black Refresh
  */
 export default function WorkflowCommandBar({
   instance,
@@ -25,36 +27,39 @@ export default function WorkflowCommandBar({
 
   return (
     <div className="bp-cmdbar">
-      {/* 1. Workflow Version Tag */}
-      <div className="bp-cmdbar-tag">
-        <span>PST_AD_165</span>
-        <span style={{ color: 'var(--text-muted)', marginLeft: 4 }}>v1.0.0</span>
+      {/* ── Left Group ── */}
+      <div className="bp-cmdbar-left">
+        {/* 1. Workflow Version Tag */}
+        <div className="bp-cmdbar-tag">
+          <span>PST_AD_165</span>
+          <span style={{ color: 'var(--text-muted)', marginLeft: 4 }}>v1.0.0</span>
+        </div>
+
+        {/* 2. Run Workflow Button */}
+        <button
+          className="bp-btn bp-btn-primary"
+          onClick={onStartWorkflow}
+          disabled={isStarting}
+          title="Trigger new workflow run"
+        >
+          <Play size={12} fill="#ffffff" />
+          <span>{isStarting ? 'Starting…' : 'Run Workflow'}</span>
+        </button>
+
+        {/* 3. Active instance UUID badge */}
+        <div className="bp-cmdbar-id-label">
+          <span style={{ color: 'var(--text-muted)', marginRight: 4 }}>ID:</span>
+          <span style={{ color: '#93d5ff', fontWeight: 600 }}>{displayId}</span>
+        </div>
+
+        {/* 4. Atomic WAL & Zero-Token-Waste Recovery Badge */}
+        <div className="bp-cmdbar-wal-badge">
+          <span style={{ color: '#22d3ee', marginRight: 4 }}>⊕</span>
+          <span>Atomic WAL · Zero-Token-Waste Recovery</span>
+        </div>
       </div>
 
-      {/* 2. Run Workflow Button */}
-      <button
-        className="bp-btn bp-btn-primary"
-        onClick={onStartWorkflow}
-        disabled={isStarting}
-        title="Trigger new workflow run"
-      >
-        <Play size={12} fill="#ffffff" />
-        <span>{isStarting ? 'Starting…' : 'Run Workflow'}</span>
-      </button>
-
-      {/* 3. Active instance UUID badge */}
-      <div className="bp-cmdbar-id-label">
-        <span style={{ color: 'var(--text-muted)', marginRight: 4 }}>ID:</span>
-        <span style={{ color: '#93d5ff', fontWeight: 600 }}>{displayId}</span>
-      </div>
-
-      {/* 4. Atomic WAL & Zero-Token-Waste Recovery Badge */}
-      <div className="bp-cmdbar-wal-badge">
-        <span style={{ color: 'var(--cyan)', marginRight: 4 }}>⊕</span>
-        <span>Atomic WAL · Zero-Token-Waste Recovery</span>
-      </div>
-
-      {/* 5. Right: Polling & Refresh Controls */}
+      {/* ── Right Group ── */}
       <div className="bp-cmdbar-right">
         <span className="bp-poll-label">Poll: {pollingInterval / 1000}s</span>
 

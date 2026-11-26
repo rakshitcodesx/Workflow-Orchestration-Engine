@@ -7,7 +7,7 @@ import StepTimeline from './components/StepTimeline';
 import { useWorkflowPolling } from './hooks/useWorkflowPolling';
 import { liveApi, demoApi } from './services/api';
 import { MOCK_INSTANCES } from './data/mockData';
-import { AlertTriangle, Zap, Code, Terminal } from 'lucide-react';
+import { AlertTriangle, Code, Terminal } from 'lucide-react';
 import './styles/global.css';
 import './styles/dashboard.css';
 
@@ -169,57 +169,53 @@ export default function App() {
   const displayedInstances = isDemoMode ? MOCK_INSTANCES : trackedInstances;
 
   return (
-    <div className="bp-app-shell">
-      {/* ── Outer Blueprint Canvas Grid (Fixed) ── */}
+    <div className="bp-page-wrapper">
+      {/* ── Fixed Blueprint Canvas Grid ── */}
       <div className="bp-canvas" aria-hidden="true" />
 
-      {/* ── Outer Blueprint Corner Accents (Fixed overlays pinned symmetrically to 12px corners) ── */}
-      <div className="bp-corner-accent bp-corner-tl" aria-hidden="true">
-        <div className="bp-corner-bracket-tl" />
-      </div>
-      <div className="bp-corner-accent bp-corner-tr" aria-hidden="true">
-        <div className="bp-corner-bracket-tr" />
-      </div>
-      <div className="bp-corner-accent bp-corner-bl" aria-hidden="true">
-        <div className="bp-corner-bracket-bl" />
-      </div>
-      <div className="bp-corner-accent bp-corner-br" aria-hidden="true">
-        <div className="bp-corner-bracket-br" />
-      </div>
+      {/* ── 4 Right-Angle Corner Brackets Pinned at 12px ── */}
+      <div className="bp-corner-bracket bp-corner-tl" aria-hidden="true" />
+      <div className="bp-corner-bracket bp-corner-tr" aria-hidden="true" />
+      <div className="bp-corner-bracket bp-corner-bl" aria-hidden="true" />
+      <div className="bp-corner-bracket bp-corner-br" aria-hidden="true" />
 
-      {/* ── 1. Top Coordinate Ruler (horizontal insets clear corner brackets) ── */}
-      <div className="bp-ruler" aria-hidden="true" style={{ paddingLeft: '56px', paddingRight: '56px' }}>
-        <span className="bp-tick-accent">+ 000.0</span>
-        <span>|</span>
-        <span>SYS.GRID // 16:9</span>
-        <span>|</span>
-        <span className="bp-tick-accent">+ 280.0</span>
-        <span style={{ margin: '0 auto' }}>
-          <span className="bp-tick-accent">+ 560.0</span>
-          <span style={{ margin: '0 12px' }}>|</span>
-          <span>ARCH.REV.4</span>
-          <span style={{ margin: '0 12px' }}>|</span>
-          <span className="bp-tick-accent">+ 840.0</span>
-        </span>
-        <span className="bp-tick-accent">+ 1120.0</span>
-        <span>|</span>
-        <span className="bp-tick-accent">+ 1400.0</span>
-        <span>|</span>
-        <span className="bp-tick-accent">+ 1600.0</span>
-      </div>
+      {/* ── Centered Blueprint Container (max-width: 1600px) ── */}
+      <div className="bp-container">
+        {/* 1. Top Coordinate Ruler */}
+        <div className="bp-ruler" aria-hidden="true">
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <span className="bp-tick-accent">+ 000.0</span>
+            <span>|</span>
+            <span>SYS.GRID // 16:9</span>
+            <span>|</span>
+            <span className="bp-tick-accent">+ 280.0</span>
+          </div>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <span className="bp-tick-accent">+ 560.0</span>
+            <span>|</span>
+            <span>ARCH.REV.4</span>
+            <span>|</span>
+            <span className="bp-tick-accent">+ 840.0</span>
+          </div>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <span className="bp-tick-accent">+ 1120.0</span>
+            <span>|</span>
+            <span className="bp-tick-accent">+ 1400.0</span>
+            <span>|</span>
+            <span className="bp-tick-accent">+ 1600.0</span>
+          </div>
+        </div>
 
-      {/* ── 2. Top Header ── */}
-      <Header
-        isDemoMode={isDemoMode}
-        setIsDemoMode={setIsDemoMode}
-        backendConnected={backendConnected}
-        checkingHealth={checkingHealth}
-        onCheckHealth={checkHealth}
-      />
+        {/* 2. Top Header Bar */}
+        <Header
+          isDemoMode={isDemoMode}
+          setIsDemoMode={setIsDemoMode}
+          backendConnected={backendConnected}
+          checkingHealth={checkingHealth}
+          onCheckHealth={checkHealth}
+        />
 
-      {/* ── 3. Main Dashboard Body ── */}
-      <main className="bp-main">
-        {/* 3a. Mode Alert Banner (ALWAYS rendered in Demo Mode or if Live Offline) */}
+        {/* 3. Mode Alert Banner (ALWAYS rendered in Demo Mode) */}
         {isDemoMode ? (
           <div className="bp-banner">
             <div className="bp-banner-left">
@@ -229,7 +225,7 @@ export default function App() {
               </span>
             </div>
             <button
-              className="bp-btn bp-btn-secondary bp-btn-sm bp-banner-btn"
+              className="bp-btn bp-btn-secondary bp-banner-btn"
               onClick={() => setIsDemoMode(false)}
             >
               Switch to Live Mode
@@ -256,7 +252,7 @@ export default function App() {
           </div>
         ) : null}
 
-        {/* 3b. Command Bar */}
+        {/* 4. Workflow Command Bar */}
         <WorkflowCommandBar
           instance={instance}
           onStartWorkflow={handleStartWorkflow}
@@ -271,10 +267,10 @@ export default function App() {
           setPollingInterval={setPollingInterval}
         />
 
-        {/* 3c. 4-Column Summary Strip (Ripple #1) */}
+        {/* 5. 4-Column Summary Strip With Thick Isolated Cobalt/Black Ripples */}
         <ProgressIndicator instance={instance} />
 
-        {/* 3d. Technical Divider Bar: --[+ 02 // EXECUTION_SPLIT +]-- */}
+        {/* 6. Execution Split Divider */}
         <div className="bp-split-divider" aria-hidden="true">
           <span className="bp-split-divider-label">--[+ 02 // EXECUTION_SPLIT +]--</span>
           <div className="bp-split-divider-line" />
@@ -284,9 +280,9 @@ export default function App() {
           </div>
         </div>
 
-        {/* 3e. Bottom 2-Column Split (5fr Left / 7fr Right) */}
+        {/* 7. Bottom 2-Column Split */}
         <div className="bp-bottom-grid">
-          {/* Left: Demo Workflows (4) with Ripple #2 */}
+          {/* Left: Demo Workflows (4) with Isolated Cobalt/Black Ripple Container */}
           <WorkflowInstances
             instances={displayedInstances}
             activeInstanceId={activeInstanceId}
@@ -296,16 +292,12 @@ export default function App() {
             isDemoMode={isDemoMode}
           />
 
-          {/* Right: Step Execution Graph · PST_AD_165 with Ripple #3 */}
-          <div className="bp-ripple-card">
-            {/* Ripple #3 Background */}
-            <div className="bp-ripple-bg-right" aria-hidden="true" />
-
-            <div className="bp-ripple-inner">
+          {/* Right: Step Execution Graph · PST_AD_165 with Isolated Cobalt/Black Ripple Container */}
+          <div className="bp-ripple-card-right">
+            <div className="bp-ripple-inner-right">
               {/* Card Header */}
               <div className="bp-card-header">
                 <div className="bp-card-header-left">
-                  {/* Step graph tree icon */}
                   <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#22d3ee" strokeWidth="1.5">
                     <rect x="2" y="2" width="4" height="4" rx="0.5" />
                     <rect x="10" y="2" width="4" height="4" rx="0.5" />
@@ -347,7 +339,7 @@ export default function App() {
 
               {/* Raw JSON State Inspector */}
               {showRawJson && instance && (
-                <div style={{ padding: '0 12px 12px' }}>
+                <div style={{ padding: '0 8px 8px' }}>
                   <div className="bp-json-header">
                     <Terminal size={11} />
                     <span>Raw State · state.json</span>
@@ -360,13 +352,13 @@ export default function App() {
             </div>
           </div>
         </div>
-      </main>
 
-      {/* ── 4. Bottom Coordinate Ruler (horizontal insets clear corner brackets) ── */}
-      <div className="bp-ruler bp-ruler-bottom" aria-hidden="true" style={{ paddingLeft: '56px', paddingRight: '56px' }}>
-        <span className="bp-tick-accent">[COORD Y:0900]</span>
-        <span style={{ margin: '0 auto' }}>BLUEPRINT_LAYER_01 // NO_TRANSLUCENCY</span>
-        <span className="bp-tick-accent">[X:1600 Y:0900]</span>
+        {/* 8. Bottom Coordinate Ruler */}
+        <div className="bp-ruler bp-ruler-bottom" aria-hidden="true">
+          <span className="bp-tick-accent">[COORD Y:0900]</span>
+          <span>BLUEPRINT_LAYER_01 // NO_TRANSLUCENCY</span>
+          <span className="bp-tick-accent">[X:1600 Y:0900]</span>
+        </div>
       </div>
     </div>
   );

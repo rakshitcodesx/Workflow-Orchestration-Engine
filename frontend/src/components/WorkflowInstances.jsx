@@ -5,7 +5,11 @@ import { abbreviateId, formatRelativeTime } from '../utils/formatters';
 
 /**
  * WorkflowInstances — Blueprint Dark Theme
- * Left ripple card: solid #1d63ff/#070a0f concentric ripple wrapping opaque instance table.
+ * Left Ripple Container (Demo Workflows (4))
+ * Technical Specification Compliance:
+ *  - 18px 20px padding with cobalt/black repeating-radial-gradient ripples
+ *  - Inner container: #0d131d, 1.5px solid #475b7d, 4px 4px 0px #030508 shadow
+ *  - Table stretches down to full height
  */
 export default function WorkflowInstances({
   instances,
@@ -37,9 +41,8 @@ export default function WorkflowInstances({
   };
 
   return (
-    <div className="bp-ripple-card" style={{ height: '100%' }}>
-      <div className="bp-ripple-bg-left" />
-      <div className="bp-ripple-inner" style={{ flex: 1, height: 'auto' }}>
+    <div className="bp-ripple-card-left">
+      <div className="bp-ripple-inner-left">
         {/* Card header */}
         <div className="bp-card-header">
           <div className="bp-card-header-left">
@@ -58,7 +61,7 @@ export default function WorkflowInstances({
               placeholder="Lookup UUID..."
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
-              style={{ width: 150 }}
+              style={{ width: 140 }}
             />
             <button
               type="submit"
@@ -125,7 +128,7 @@ export default function WorkflowInstances({
                         </code>
                       </td>
                       <td><StatusBadge status={inst.status} /></td>
-                      <td style={{ minWidth: 90 }}>
+                      <td style={{ minWidth: 85 }}>
                         {pct !== null ? (
                           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                             <div

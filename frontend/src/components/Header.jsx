@@ -2,22 +2,18 @@ import React from 'react';
 
 /**
  * Header — Blueprint Dark Theme
- * Matches target design (053be6ae.png / media_1795691357498_7309acc4.jpg):
- *  - Left: Solid cobalt (#1d63ff) hub/node icon badge with white network graph SVG
- *  - Title: Flat ice-blue (#93d5ff) "Workflow Orchestration Engine"
- *  - Subtitle: "DATE, PLAY, MISBEHAVE (WITH WORKFLOWS)" in monospace
- *  - Right: Exactly 3 solid matte-black (#070a0f) buttons with hard offset shadows:
- *      1. "?" (Help)
- *      2. "Live" (with green indicator dot)
- *      3. "Demo" (with Zap icon)
+ * Technical Specification Compliance:
+ *  - Left: 34px x 34px solid cobalt (#1d63ff) hub badge with white network graph SVG
+ *  - Title: Flat ice-blue (#93d5ff) "Workflow Orchestration Engine" (no gradient)
+ *  - Subtitle: "DATE, PLAY, MISBEHAVE (WITH WORKFLOWS)" in monospace (#9ba8bd)
+ *  - Right: Exactly 3 solid matte-black (#070a0f) buttons: "?", "Live", "Demo"
  */
 export default function Header({ isDemoMode, setIsDemoMode, backendConnected, checkingHealth, onCheckHealth }) {
   return (
     <header className="bp-header">
-      {/* ── Left: Hub Icon Badge + Title + Subtitle ── */}
+      {/* ── Left: Hub Badge + Title + Subtitle ── */}
       <div className="bp-header-left">
         <div className="bp-hub-badge" title="PST_AD_165 Hub">
-          {/* Network Hub / Node graph SVG */}
           <svg
             width="20"
             height="20"
@@ -50,16 +46,17 @@ export default function Header({ isDemoMode, setIsDemoMode, backendConnected, ch
 
       {/* ── Right: Exactly 3 Matte-Black Buttons ── */}
       <div className="bp-header-right">
-        {/* 1. Help button */}
+        {/* 1. Help button: single '?' character */}
         <button
           className="bp-btn bp-btn-secondary bp-header-btn"
           title="Help & Documentation"
           aria-label="Help"
+          style={{ width: 34, height: 34, padding: 0, justifyContent: 'center' }}
         >
           ?
         </button>
 
-        {/* 2. Live pill */}
+        {/* 2. Live pill button with status dot */}
         <button
           className={`bp-btn bp-btn-secondary bp-header-btn${!isDemoMode ? ' bp-header-btn-active-live' : ''}`}
           onClick={() => {
