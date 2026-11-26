@@ -228,7 +228,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  height: 26px;
+  height: 32px;
 }
 
 .bp-header-actions-row {
@@ -239,7 +239,7 @@
 
 .bp-logo-mark {
   display: block;
-  height: 26px;
+  height: 32px;
   width: auto;
   overflow: visible;
 }

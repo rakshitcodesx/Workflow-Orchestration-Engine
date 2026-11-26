@@ -20,8 +20,8 @@ export default function Header({ isDemoMode, setIsDemoMode, backendConnected, ch
         {/* Cobalt W + Cyan Circuit Mark positioned directly above the Demo button */}
         <div className="bp-header-logo-row" title="Workflow Orchestration Engine">
           <svg
-            width="36"
-            height="26"
+            width="42"
+            height="32"
             viewBox="0 0 36 28"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
