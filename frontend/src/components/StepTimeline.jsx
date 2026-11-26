@@ -160,16 +160,14 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                     </div>
                   )}
 
-                  {/* Error accordion */}
+                  {/* Error box */}
                   {step.lastError && (
                     <div className="bp-error-box" onClick={() => toggleError(step.stepId)}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontWeight: 600, fontSize: 11 }}>
-                        <AlertTriangle size={12} />
-                        Last error: {step.lastError.length > 80 ? step.lastError.slice(0, 80) + '…' : step.lastError}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600, fontSize: 11 }}>
+                        <AlertTriangle size={12} color="#ef4444" />
+                        <span>Last error: {step.lastError}</span>
                       </div>
-                      {isErrOpen && (
-                        <pre>{step.lastError}</pre>
-                      )}
+                      <pre>{step.lastError}</pre>
                     </div>
                   )}
                 </div>
@@ -179,7 +177,7 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
             {/* WAL_CHECKPOINT_OK connector badge between steps */}
             {showWalBadge && !isLast && (
               <div className="bp-wal-badge">
-                <span className="bp-wal-badge-inner">+ WAL_CHECKPOINT_OK</span>
+                <span className="bp-wal-badge-inner">↓ WAL_CHECKPOINT_OK</span>
               </div>
             )}
           </React.Fragment>

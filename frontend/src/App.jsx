@@ -7,56 +7,67 @@ import StepTimeline from './components/StepTimeline';
 import { useWorkflowPolling } from './hooks/useWorkflowPolling';
 import { liveApi, demoApi } from './services/api';
 import { MOCK_INSTANCES } from './data/mockData';
-import { AlertTriangle, Zap, Code, Terminal, Plus, ArrowRight } from 'lucide-react';
+import { AlertTriangle, Zap, Code, Terminal } from 'lucide-react';
 import './styles/global.css';
 import './styles/dashboard.css';
 
 const LOCAL_STORAGE_KEY = 'pst_ad_165_tracked_instances';
 
 export default function App() {
-  /* ── Mode ── */
+  /* ── Mode: default to Demo mode (true) ── */
   const [isDemoMode, setIsDemoMode] = useState(
-    () => localStorage.getItem('pst_ad_165_demo_mode') === 'true'
+    () => localStorage.getItem('pst_ad_165_demo_mode') !== 'false'
   );
-  const [backendConnected, setBackendConnected]   = useState(false);
-  const [checkingHealth,   setCheckingHealth]     = useState(false);
+  const [backendConnected, setBackendConnected] = useState(false);
+  const [checkingHealth, setCheckingHealth] = useState(false);
 
   /* ── Tracked instances (live mode) ── */
   const [trackedInstances, setTrackedInstances] = useState(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       return saved ? JSON.parse(saved) : [];
-    } catch { return []; }
+    } catch {
+      return [];
+    }
   });
 
   /* ── Active instance ── */
   const [activeInstanceId, setActiveInstanceId] = useState(
-    () => isDemoMode
-      ? MOCK_INSTANCES[1].instanceId
-      : (trackedInstances[0]?.instanceId || null)
+    () => (isDemoMode ? MOCK_INSTANCES[1].instanceId : trackedInstances[0]?.instanceId || null)
   );
 
   /* ── UI action states ── */
-  const [isStarting,          setIsStarting]          = useState(false);
-  const [isRetrying,          setIsRetrying]          = useState(false);
+  const [isStarting, setIsStarting] = useState(false);
+  const [isRetrying, setIsRetrying] = useState(false);
   const [isSubmittingDecision, setIsSubmittingDecision] = useState(false);
-  const [showRawJson,         setShowRawJson]         = useState(false);
+  const [showRawJson, setShowRawJson] = useState(false);
 
-  /* ── Polling ── */
+  /* ── Polling hook ── */
   const {
-    instance, loading: instanceLoading, error: instanceError,
-    isPolling, togglePause, refresh, pollingInterval, setPollingInterval, setInstance,
+    instance,
+    loading: instanceLoading,
+    error: instanceError,
+    isPolling,
+    togglePause,
+    refresh,
+    pollingInterval,
+    setPollingInterval,
   } = useWorkflowPolling(activeInstanceId, isDemoMode, 2000);
 
-  /* ── Persist tracked instances ── */
+  /* ── Persistence ── */
   useEffect(() => {
-    try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(trackedInstances)); }
-    catch (e) { console.error('Failed to save tracked instances', e); }
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(trackedInstances));
+    } catch (e) {
+      console.error('Failed to save tracked instances', e);
+    }
   }, [trackedInstances]);
 
   useEffect(() => {
     localStorage.setItem('pst_ad_165_demo_mode', String(isDemoMode));
-    if (isDemoMode && !activeInstanceId) setActiveInstanceId(MOCK_INSTANCES[1].instanceId);
+    if (isDemoMode && !activeInstanceId) {
+      setActiveInstanceId(MOCK_INSTANCES[1].instanceId);
+    }
   }, [isDemoMode, activeInstanceId]);
 
   /* ── Health check ── */
@@ -74,28 +85,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, [checkHealth]);
 
-  /* ── Sync tracked instances with latest poll ── */
-  useEffect(() => {
-    if (instance && !isDemoMode) {
-      setTrackedInstances((prev) => {
-        const index = prev.findIndex((i) => i.instanceId === instance.instanceId);
-        const entry = {
-          instanceId: instance.instanceId,
-          workflowId: instance.workflowId,
-          status:     instance.status,
-          createdAt:  instance.createdAt,
-          updatedAt:  instance.updatedAt,
-        };
-        if (index >= 0) {
-          const updated = [...prev];
-          updated[index] = entry;
-          return updated;
-        }
-        return [entry, ...prev];
-      });
-    }
-  }, [instance, isDemoMode]);
-
   /* ── Handlers ── */
   const handleStartWorkflow = async () => {
     setIsStarting(true);
@@ -104,15 +93,23 @@ export default function App() {
       const res = await api.startWorkflow('PST_AD_165');
       const newId = res.instanceId;
       if (!isDemoMode) {
-        setTrackedInstances((prev) => [{
-          instanceId: newId, workflowId: 'PST_AD_165', status: 'pending',
-          createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
-        }, ...prev]);
+        setTrackedInstances((prev) => [
+          {
+            instanceId: newId,
+            workflowId: 'PST_AD_165',
+            status: 'pending',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+          ...prev,
+        ]);
       }
       setActiveInstanceId(newId);
     } catch (err) {
       alert(`Failed to start workflow: ${err.message}`);
-    } finally { setIsStarting(false); }
+    } finally {
+      setIsStarting(false);
+    }
   };
 
   const handleRetryWorkflow = async () => {
@@ -122,8 +119,11 @@ export default function App() {
       const api = isDemoMode ? demoApi : liveApi;
       await api.retryWorkflow(activeInstanceId);
       await refresh();
-    } catch (err) { alert(`Retry failed: ${err.message}`); }
-    finally { setIsRetrying(false); }
+    } catch (err) {
+      alert(`Retry failed: ${err.message}`);
+    } finally {
+      setIsRetrying(false);
+    }
   };
 
   const handleApproveStep = async (stepId, decision) => {
@@ -133,17 +133,27 @@ export default function App() {
       const api = isDemoMode ? demoApi : liveApi;
       await api.approveStep(activeInstanceId, stepId, decision);
       await refresh();
-    } catch (err) { alert(`Approval decision failed: ${err.message}`); throw err; }
-    finally { setIsSubmittingDecision(false); }
+    } catch (err) {
+      alert(`Approval decision failed: ${err.message}`);
+      throw err;
+    } finally {
+      setIsSubmittingDecision(false);
+    }
   };
 
   const handleTrackInstanceId = (id) => {
     if (!id) return;
     if (!isDemoMode && !trackedInstances.some((i) => i.instanceId === id)) {
-      setTrackedInstances((prev) => [{
-        instanceId: id, workflowId: 'PST_AD_165', status: 'pending',
-        createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
-      }, ...prev]);
+      setTrackedInstances((prev) => [
+        {
+          instanceId: id,
+          workflowId: 'PST_AD_165',
+          status: 'pending',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        ...prev,
+      ]);
     }
     setActiveInstanceId(id);
   };
@@ -159,24 +169,42 @@ export default function App() {
   const displayedInstances = isDemoMode ? MOCK_INSTANCES : trackedInstances;
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Blueprint grid canvas (fixed behind everything) */}
-      <div className="bp-canvas" />
+    <div className="bp-app-shell">
+      {/* ── Outer Blueprint Canvas Grid (Fixed) ── */}
+      <div className="bp-canvas" aria-hidden="true" />
 
-      {/* Top coordinate ruler */}
-      <div className="bp-ruler" style={{ zIndex: 60, position: 'relative' }}>
+      {/* ── Outer Blueprint Corner Accents (Fixed overlays) ── */}
+      <div className="bp-corner-accent bp-corner-tl" aria-hidden="true">
+        <span className="bp-corner-plus">+</span>
+        <div className="bp-corner-bracket-tl" />
+        <span className="bp-corner-arrow">↓</span>
+      </div>
+      <div className="bp-corner-accent bp-corner-tr" aria-hidden="true">
+        <div className="bp-corner-bracket-tr" />
+        <span className="bp-corner-hatches">///</span>
+      </div>
+      <div className="bp-corner-accent bp-corner-bl" aria-hidden="true">
+        <div className="bp-corner-bracket-bl" />
+      </div>
+      <div className="bp-corner-accent bp-corner-br" aria-hidden="true">
+        <div className="bp-corner-bracket-br" />
+        <span className="bp-corner-sparkle">✦</span>
+      </div>
+
+      {/* ── 1. Top Coordinate Ruler ── */}
+      <div className="bp-ruler" aria-hidden="true">
         <span className="bp-tick-accent">+ 000.0</span>
         <span>|</span>
         <span>SYS.GRID // 16:9</span>
         <span>|</span>
         <span className="bp-tick-accent">+ 280.0</span>
-        <span>|</span>
-        <span className="bp-tick-accent">+ 560.0</span>
-        <span>|</span>
-        <span>ARCH.REV.4</span>
-        <span>|</span>
-        <span className="bp-tick-accent">+ 840.0</span>
-        <span>|</span>
+        <span style={{ margin: '0 auto' }}>
+          <span className="bp-tick-accent">+ 560.0</span>
+          <span style={{ margin: '0 12px' }}>|</span>
+          <span>ARCH.REV.4</span>
+          <span style={{ margin: '0 12px' }}>|</span>
+          <span className="bp-tick-accent">+ 840.0</span>
+        </span>
         <span className="bp-tick-accent">+ 1120.0</span>
         <span>|</span>
         <span className="bp-tick-accent">+ 1400.0</span>
@@ -184,7 +212,7 @@ export default function App() {
         <span className="bp-tick-accent">+ 1600.0</span>
       </div>
 
-      {/* Header */}
+      {/* ── 2. Top Header ── */}
       <Header
         isDemoMode={isDemoMode}
         setIsDemoMode={setIsDemoMode}
@@ -193,20 +221,32 @@ export default function App() {
         onCheckHealth={checkHealth}
       />
 
-      {/* Main content */}
+      {/* ── 3. Main Dashboard Body ── */}
       <main className="bp-main">
-
-        {/* Backend offline banner (live mode only) */}
-        {!isDemoMode && !backendConnected && (
+        {/* 3a. Mode Alert Banner (ALWAYS rendered in Demo Mode or if Live Offline) */}
+        {isDemoMode ? (
+          <div className="bp-banner">
+            <div className="bp-banner-left">
+              <AlertTriangle size={16} color="#f59e0b" style={{ flexShrink: 0 }} />
+              <span>
+                Demo Mode Active: Workflow execution, approval gates, and retries are simulated in-browser. Live backend calls are disabled.
+              </span>
+            </div>
+            <button
+              className="bp-btn bp-btn-secondary bp-btn-sm bp-banner-btn"
+              onClick={() => setIsDemoMode(false)}
+            >
+              Switch to Live Mode
+            </button>
+          </div>
+        ) : !backendConnected ? (
           <div className="bp-banner bp-banner-error">
             <div className="bp-banner-left">
-              <AlertTriangle size={16} color="#ef4444" />
+              <AlertTriangle size={16} color="#ef4444" style={{ flexShrink: 0 }} />
               <span>
                 <strong>Backend Offline:</strong> Unable to connect to Flask on{' '}
-                <code style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>
-                  http://127.0.0.1:5000
-                </code>.
-                Start with <code style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>python3 app.py</code> or switch to Demo Mode.
+                <code style={{ fontFamily: 'var(--font-mono)' }}>http://127.0.0.1:5000</code>.
+                Start with <code style={{ fontFamily: 'var(--font-mono)' }}>python3 app.py</code> or switch to Demo Mode.
               </span>
             </div>
             <div style={{ display: 'flex', gap: 6 }}>
@@ -218,24 +258,9 @@ export default function App() {
               </button>
             </div>
           </div>
-        )}
+        ) : null}
 
-        {/* Demo mode banner */}
-        {isDemoMode && (
-          <div className="bp-banner">
-            <div className="bp-banner-left">
-              <Zap size={15} color="#f59e0b" />
-              <span>
-                <strong>Demo Mode Active:</strong> Workflow execution, approval gates, and retries are simulated in-browser. Live backend calls are disabled.
-              </span>
-            </div>
-            <button className="bp-btn bp-btn-secondary bp-btn-sm" onClick={() => setIsDemoMode(false)}>
-              Switch to Live Mode
-            </button>
-          </div>
-        )}
-
-        {/* Command bar */}
+        {/* 3b. Command Bar */}
         <WorkflowCommandBar
           instance={instance}
           onStartWorkflow={handleStartWorkflow}
@@ -250,26 +275,24 @@ export default function App() {
           setPollingInterval={setPollingInterval}
         />
 
-        {/* 4-column summary strip with Ripple #1 */}
+        {/* 3c. 4-Column Summary Strip (Ripple #1) */}
         <ProgressIndicator instance={instance} />
 
-        {/* EXECUTION_SPLIT divider */}
-        <div className="bp-split-divider">
+        {/* 3d. Technical Divider Bar: --[+ 02 // EXECUTION_SPLIT +]-- */}
+        <div className="bp-split-divider" aria-hidden="true">
           <div className="bp-split-divider-line" />
           <span className="bp-split-divider-label">--[+ 02 // EXECUTION_SPLIT +]--</span>
-          <div className="bp-split-divider-icon">
-            <Plus size={11} color="#22d3ee" />
-          </div>
           <div className="bp-split-divider-line" />
-          <div style={{ display: 'flex', alignItems: 'center', color: '#22d3ee' }}>
-            <ArrowRight size={12} />
+          <div className="bp-split-divider-accents">
+            <span className="bp-split-accent-plus">+</span>
+            <span className="bp-split-accent-arrow">―→</span>
+            <span className="bp-split-accent-ticks">///</span>
           </div>
         </div>
 
-        {/* Bottom 2-column split */}
+        {/* 3e. Bottom 2-Column Split (5fr Left / 7fr Right) */}
         <div className="bp-bottom-grid">
-
-          {/* LEFT: instances table with Ripple #2 */}
+          {/* Left: Demo Workflows (4) with Ripple #2 */}
           <WorkflowInstances
             instances={displayedInstances}
             activeInstanceId={activeInstanceId}
@@ -279,95 +302,61 @@ export default function App() {
             isDemoMode={isDemoMode}
           />
 
-          {/* RIGHT: step execution graph with Ripple #3 */}
+          {/* Right: Step Execution Graph · PST_AD_165 with Ripple #3 */}
           <div className="bp-ripple-card">
-            <div className="bp-ripple-bg-right" />
+            {/* Ripple #3 Background */}
+            <div className="bp-ripple-bg-right" aria-hidden="true" />
+
             <div className="bp-ripple-inner">
-              {/* Card header */}
+              {/* Card Header */}
               <div className="bp-card-header">
                 <div className="bp-card-header-left">
-                  {/* Grid icon for step graph */}
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <rect x="1" y="1" width="4" height="4" stroke="#22d3ee" strokeWidth="1.3" />
-                    <rect x="9" y="1" width="4" height="4" stroke="#22d3ee" strokeWidth="1.3" />
-                    <rect x="1" y="9" width="4" height="4" stroke="#22d3ee" strokeWidth="1.3" />
-                    <rect x="9" y="9" width="4" height="4" stroke="#22d3ee" strokeWidth="1.3" />
-                    <line x1="7" y1="3" x2="9" y2="3" stroke="#22d3ee" strokeWidth="1" />
-                    <line x1="5" y1="11" x2="9" y2="11" stroke="#22d3ee" strokeWidth="1" />
-                    <line x1="3" y1="5" x2="3" y2="9" stroke="#22d3ee" strokeWidth="1" />
-                    <line x1="11" y1="5" x2="11" y2="9" stroke="#22d3ee" strokeWidth="1" />
+                  {/* Step graph tree icon */}
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#22d3ee" strokeWidth="1.5">
+                    <rect x="2" y="2" width="4" height="4" rx="0.5" />
+                    <rect x="10" y="2" width="4" height="4" rx="0.5" />
+                    <rect x="2" y="10" width="4" height="4" rx="0.5" />
+                    <rect x="10" y="10" width="4" height="4" rx="0.5" />
+                    <line x1="6" y1="4" x2="10" y2="4" />
+                    <line x1="4" y1="6" x2="4" y2="10" />
                   </svg>
                   <span className="bp-card-title">
-                    Step Execution Graph
-                    {instance && (
-                      <span
-                        style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: 10,
-                          color: 'var(--text-muted)',
-                          marginLeft: 6,
-                        }}
-                      >
-                        · {instance.workflowId}
-                      </span>
-                    )}
+                    Step Execution Graph · PST_AD_165
                   </span>
                 </div>
+
                 {instance && (
                   <button
                     className="bp-btn bp-btn-secondary bp-btn-sm"
                     onClick={() => setShowRawJson((p) => !p)}
+                    title="Inspect JSON state"
                   >
                     <Code size={12} />
-                    {showRawJson ? 'Hide JSON' : 'Inspect JSON'}
+                    <span>{showRawJson ? 'Hide JSON' : '<> Inspect JSON'}</span>
                   </button>
                 )}
               </div>
 
-              {/* API error */}
+              {/* API error alert if any */}
               {instanceError && (
-                <div
-                  style={{
-                    margin: '10px 12px',
-                    padding: '8px 10px',
-                    background: 'var(--error-container)',
-                    border: '1.5px solid var(--error)',
-                    borderRadius: 'var(--radius-sm)',
-                    color: 'var(--error-text)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 11,
-                    boxShadow: 'var(--shadow-card)',
-                  }}
-                >
+                <div className="bp-api-error">
                   <strong>API Error:</strong> {instanceError}
                 </div>
               )}
 
-              {/* Step timeline */}
+              {/* Step timeline with nodes and connectors */}
               <StepTimeline
                 instance={instance}
                 onApproveStep={handleApproveStep}
                 isSubmittingDecision={isSubmittingDecision}
               />
 
-              {/* Raw JSON inspector */}
+              {/* Raw JSON State Inspector */}
               {showRawJson && instance && (
-                <div style={{ padding: '0 10px 10px' }}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      padding: '8px 2px 4px',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: 10,
-                      color: 'var(--text-muted)',
-                      borderTop: '1px solid var(--outline)',
-                      marginBottom: 6,
-                    }}
-                  >
+                <div style={{ padding: '0 12px 12px' }}>
+                  <div className="bp-json-header">
                     <Terminal size={11} />
-                    Raw State · state.json
+                    <span>Raw State · state.json</span>
                   </div>
                   <pre className="bp-json-inspector">
                     {JSON.stringify(instance, null, 2)}
@@ -376,16 +365,13 @@ export default function App() {
               )}
             </div>
           </div>
-
         </div>
       </main>
 
-      {/* Bottom coordinate ruler */}
-      <div className="bp-ruler bp-ruler-bottom" style={{ zIndex: 60, position: 'relative' }}>
+      {/* ── 4. Bottom Coordinate Ruler ── */}
+      <div className="bp-ruler bp-ruler-bottom" aria-hidden="true">
         <span className="bp-tick-accent">[COORD Y:0900]</span>
-        <span>|</span>
-        <span>BLUEPRINT_LAYER_01 // NO_TRANSLUCENCY</span>
-        <span>|</span>
+        <span style={{ margin: '0 auto' }}>BLUEPRINT_LAYER_01 // NO_TRANSLUCENCY</span>
         <span className="bp-tick-accent">[X:1600 Y:0900]</span>
       </div>
     </div>
