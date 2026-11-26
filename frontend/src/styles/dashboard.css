@@ -135,8 +135,8 @@
    ════════════════════════════════════ */
 .bp-ruler {
   height: 22px;
-  background: #090d14;
-  border-bottom: 1px solid #142033;
+  background: transparent;
+  border-bottom: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -147,19 +147,20 @@
 }
 .bp-ruler-bottom {
   border-bottom: none;
-  border-top: 1px solid #142033;
+  border-top: none;
   margin-top: 12px;
 }
 .bp-ruler span {
   font-family: var(--font-mono);
-  font-size: 9px;
-  color: #2a5a7a;
+  font-size: 9.5px;
+  color: #9ba8bd;
   white-space: nowrap;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 .bp-ruler .bp-tick-accent {
   color: #22d3ee;
+  font-weight: 600;
 }
 
 /* ════════════════════════════════════
@@ -167,13 +168,13 @@
    ════════════════════════════════════ */
 .bp-header {
   height: 56px;
-  background: #090d14;
-  border-bottom: 1.5px solid #1e314d;
+  background: transparent;
+  border-bottom: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 4px;
-  box-shadow: 0 3px 0 #030508;
+  box-shadow: none;
   flex-shrink: 0;
 }
 
