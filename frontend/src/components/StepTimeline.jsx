@@ -76,6 +76,9 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
         const isErrOpen   = expandedErrors[step.stepId] ?? Boolean(step.lastError);
         const showWalBadge = !isLast && (isSucceeded || isRunning);
 
+        // Connector colour class based on upstream step status
+        const connectorClass = isSucceeded ? 'succeeded' : isRunning ? 'running' : '';
+
         return (
           <React.Fragment key={step.stepId}>
             <div className={cardClass(step.status)}>
@@ -173,10 +176,20 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
               </div>
             </div>
 
-            {/* WAL_CHECKPOINT_OK connector badge between steps */}
-            {showWalBadge && !isLast && (
+            {/* Connector rail + WAL_CHECKPOINT_OK badge between steps */}
+            {!isLast && (
               <div className="bp-wal-badge">
-                <span className="bp-wal-badge-inner">↓ WAL_CHECKPOINT_OK</span>
+                <div className="bp-wal-rail-line" />
+                {showWalBadge ? (
+                  <span className="bp-wal-badge-inner">↓ WAL_CHECKPOINT_OK</span>
+                ) : (
+                  <div className={`bp-step-connector-rail`}>
+                    <div className={`bp-step-connector-line ${connectorClass}`} />
+                    <div className={`bp-step-connector-arrow ${connectorClass}`} />
+                    <div className={`bp-step-connector-line ${connectorClass}`} />
+                  </div>
+                )}
+                <div className="bp-wal-rail-line" />
               </div>
             )}
           </React.Fragment>

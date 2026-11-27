@@ -68,10 +68,11 @@
   flex-direction: column;
 }
 .bp-corner-bracket-tl {
-  width: 22px;
-  height: 22px;
-  border-top: 2px solid var(--cyan);
-  border-left: 2px solid var(--cyan);
+  width: 20px;
+  height: 20px;
+  border-top: 1.5px solid var(--cyan);
+  border-left: 1.5px solid var(--cyan);
+  opacity: 0.65;
 }
 .bp-corner-arrow-down {
   font-family: var(--font-mono);
@@ -90,10 +91,11 @@
   align-items: flex-end;
 }
 .bp-corner-bracket-tr {
-  width: 22px;
-  height: 22px;
-  border-top: 2px solid var(--white);
-  border-right: 2px solid var(--white);
+  width: 20px;
+  height: 20px;
+  border-top: 1.5px solid var(--white);
+  border-right: 1.5px solid var(--white);
+  opacity: 0.55;
 }
 .bp-corner-hatch {
   font-family: var(--font-mono);
@@ -134,7 +136,7 @@
    4. COORDINATE RULERS
    ════════════════════════════════════ */
 .bp-ruler {
-  height: 22px;
+  height: 20px;
   background: transparent;
   border-bottom: none;
   display: flex;
@@ -144,6 +146,7 @@
   padding-right: 56px;
   flex-shrink: 0;
   box-sizing: border-box;
+  gap: 8px;
 }
 .bp-ruler-bottom {
   border-bottom: none;
@@ -152,15 +155,17 @@
 }
 .bp-ruler span {
   font-family: var(--font-mono);
-  font-size: 9.5px;
-  color: #9ba8bd;
+  font-size: 9px;
+  color: #6b7c94;
   white-space: nowrap;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
 }
 .bp-ruler .bp-tick-accent {
   color: #22d3ee;
   font-weight: 600;
+  opacity: 0.80;
 }
 
 /* ════════════════════════════════════
@@ -220,8 +225,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
+  padding-right: 2px;
 }
 
 .bp-header-logo-row {
@@ -229,6 +235,9 @@
   align-items: center;
   justify-content: flex-end;
   height: 32px;
+  padding-right: 2px;
+  /* Aligns the right edge of the logo mark with the right edge of the Demo button */
+  margin-right: 2px;
 }
 
 .bp-header-actions-row {
@@ -371,7 +380,7 @@
 .bp-summary-strip-wrapper {
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1.5px solid #475b7d;
   box-shadow: 6px 6px 0px #030508;
   padding: 12px 14px;
@@ -409,15 +418,17 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
 }
 
 .bp-metric-label {
   font-family: var(--font-mono);
   font-size: 9px;
   color: var(--text-muted);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
+  font-weight: 500;
 }
 
 .bp-metric-value {
@@ -426,14 +437,16 @@
   font-weight: 700;
   color: var(--ice-blue);
   letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
 .bp-progress-track {
-  height: 4px;
-  background: rgba(34, 211, 238, 0.16);
+  height: 3px;
+  background: rgba(34, 211, 238, 0.14);
   border-radius: 2px;
   overflow: hidden;
-  margin-top: 6px;
+  margin-top: 7px;
+  border: 1px solid rgba(34, 211, 238, 0.10);
 }
 
 .bp-progress-fill {
@@ -441,6 +454,7 @@
   background: var(--cyan);
   border-radius: 2px;
   transition: width 0.4s ease;
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.4);
 }
 
 /* ════════════════════════════════════
@@ -522,6 +536,33 @@
 }
 @media (max-width: 1024px) {
   .bp-bottom-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Summary strip ripple softening (matches left/right card treatment) ── */
+.bp-summary-strip-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: -80px;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-radial-gradient(
+    circle at 84% 48%,
+    rgba(29, 99, 255, 0.30) 0px,
+    rgba(29, 99, 255, 0.30) 18px,
+    rgba(7, 10, 15, 0.60) 19.5px,
+    #070a0f 20px,
+    #070a0f 38px,
+    rgba(7, 10, 15, 0.60) 39.5px,
+    rgba(29, 99, 255, 0.30) 40px
+  );
+  transform-origin: 84% 48%;
+  animation: bp-ripple-breathe-right 28s ease-in-out infinite alternate;
+  opacity: 0.75;
+}
+
+.bp-summary-cards {
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Left Ripple Container (Demo Workflows) ── */
@@ -858,41 +899,74 @@
 .bp-status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  padding: 2px 7px;
-  border-radius: var(--radius-xs);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 8px 2px 6px;
+  border-radius: 3px;
   border: 1px solid;
   box-shadow: 2px 2px 0px #030508;
   white-space: nowrap;
+  text-transform: uppercase;
 }
+
+/* Status dot inside each badge */
+.bp-status-badge::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
 .bp-status-running {
-  background: rgba(245, 158, 11, 0.14);
+  background: rgba(245, 158, 11, 0.12);
   border-color: #f59e0b;
   color: #fde68a;
 }
+.bp-status-running::before {
+  background: #f59e0b;
+  box-shadow: 0 0 4px rgba(245, 158, 11, 0.70);
+}
+
 .bp-status-succeeded, .bp-status-completed {
   background: var(--success-container);
   border-color: var(--success);
   color: var(--success-text);
 }
+.bp-status-succeeded::before, .bp-status-completed::before {
+  background: var(--success);
+}
+
 .bp-status-failed {
   background: var(--error-container);
   border-color: var(--error);
   color: var(--error-text);
 }
+.bp-status-failed::before {
+  background: var(--error);
+}
+
 .bp-status-pending {
   background: var(--surface-variant);
   border-color: var(--outline);
   color: var(--text-secondary);
 }
+.bp-status-pending::before {
+  background: #475b7d;
+}
+
 .bp-status-waiting {
   background: var(--warning-container);
   border-color: var(--warning);
   color: var(--warning-text);
+}
+.bp-status-waiting::before {
+  background: var(--warning);
+  box-shadow: 0 0 4px rgba(245, 158, 11, 0.60);
 }
 
 /* ════════════════════════════════════
@@ -902,8 +976,61 @@
   display: flex;
   flex-direction: column;
   padding: 0;
-  gap: 14px;
+  gap: 0;
   overflow-y: auto;
+}
+
+/* Each step + its connector rail wrapped together */
+.bp-step-row {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Vertical connector rail between steps */
+.bp-step-connector-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin: 4px 0;
+}
+
+.bp-step-connector-line {
+  width: 2px;
+  height: 10px;
+  background: #2a3d5e;
+  flex-shrink: 0;
+}
+
+.bp-step-connector-line.succeeded {
+  background: var(--success);
+  opacity: 0.70;
+}
+
+.bp-step-connector-line.running {
+  background: var(--cobalt);
+  opacity: 0.70;
+}
+
+.bp-step-connector-arrow {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #2a3d5e;
+  flex-shrink: 0;
+  margin-top: -1px;
+}
+
+.bp-step-connector-arrow.succeeded {
+  border-top-color: var(--success);
+  opacity: 0.70;
+}
+
+.bp-step-connector-arrow.running {
+  border-top-color: var(--cobalt);
+  opacity: 0.70;
 }
 
 .bp-step-node {
@@ -934,11 +1061,12 @@
   padding: 12px 14px;
   box-shadow: 4px 4px 0px #030508;
   transition: border-color var(--transition-fast);
+  margin-bottom: 0;
 }
 .bp-step-card-running   { border-color: var(--cobalt); }
 .bp-step-card-waiting   { border-color: var(--warning); }
 .bp-step-card-failed    { border-color: var(--error); }
-.bp-step-card-succeeded { border-color: #475b7d; }
+.bp-step-card-succeeded { border-color: rgba(16, 185, 129, 0.40); }
 
 .bp-step-title-row {
   display: flex;
@@ -952,6 +1080,7 @@
   font-weight: 600;
   font-size: 13px;
   color: var(--text-primary);
+  font-family: var(--font-body);
 }
 
 .bp-step-id-tag {
@@ -962,12 +1091,15 @@
   background: var(--surface-variant);
   border: 1px solid var(--outline);
   color: var(--ice-blue);
+  font-variant-numeric: tabular-nums;
 }
 
 .bp-step-sub {
   font-size: 10.5px;
   color: var(--text-muted);
-  margin-top: 2px;
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.03em;
 }
 
 .bp-step-meta-row {
@@ -986,12 +1118,14 @@
   border-radius: var(--radius-xs);
   color: var(--text-secondary);
   box-shadow: 2px 2px 0px #030508;
+  font-variant-numeric: tabular-nums;
 }
 
 .bp-step-dur {
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
 }
 
 .bp-ztw-note {
@@ -1004,6 +1138,7 @@
   margin-top: 6px;
   padding-top: 6px;
   border-top: 1px solid rgba(16, 185, 129, 0.20);
+  letter-spacing: 0.02em;
 }
 
 .bp-wal-badge {
@@ -1011,15 +1146,24 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Thin vertical bar above and below the WAL pill */
+.bp-wal-rail-line {
+  width: 2px;
+  height: 8px;
+  background: rgba(34, 211, 238, 0.35);
 }
 
 .bp-wal-badge-inner {
   font-family: var(--font-mono);
   font-size: 9px;
   color: #22d3ee;
-  border: 1.5px solid rgba(34, 211, 238, 0.40);
+  border: 1.5px solid rgba(34, 211, 238, 0.45);
   background: #070a0f;
-  padding: 3px 12px;
+  padding: 3px 14px;
   border-radius: var(--radius-xs);
   letter-spacing: 0.08em;
   box-shadow: 2px 2px 0px #030508;

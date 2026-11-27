@@ -59,7 +59,7 @@ export default function ProgressIndicator({ instance, isDemoMode = false }) {
         {/* 1: Workflow Status */}
         <div className="bp-metric-box">
           <div className="bp-metric-label">WORKFLOW STATUS:</div>
-          <div className="bp-metric-value" style={{ color: statusColor }}>
+          <div className="bp-metric-value" style={{ color: statusColor, fontVariantNumeric: 'tabular-nums' }}>
             {status.toUpperCase().replace('_', ' ')}
           </div>
         </div>
@@ -68,8 +68,8 @@ export default function ProgressIndicator({ instance, isDemoMode = false }) {
         <div className="bp-metric-box">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span className="bp-metric-label" style={{ marginBottom: 0 }}>PIPELINE PROGRESS:</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#93d5ff', fontWeight: 600 }}>
-              {succeededCount} / {totalSteps} steps
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11.5, color: '#93d5ff', fontWeight: 700, fontVariantNumeric: 'tabular-nums', letterSpacing: '0.02em' }}>
+              {succeededCount}&nbsp;/&nbsp;{totalSteps}
             </span>
           </div>
           <div className="bp-progress-track">
@@ -80,7 +80,7 @@ export default function ProgressIndicator({ instance, isDemoMode = false }) {
         {/* 3: Zero-Token-Waste */}
         <div className="bp-metric-box">
           <div className="bp-metric-label">ZERO-TOKEN-WASTE:</div>
-          <div className="bp-metric-value" style={{ color: '#93d5ff' }}>
+          <div className="bp-metric-value" style={{ color: '#93d5ff', fontVariantNumeric: 'tabular-nums' }}>
             {ztw} cached
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function ProgressIndicator({ instance, isDemoMode = false }) {
         {/* 4: Elapsed Time */}
         <div className="bp-metric-box">
           <div className="bp-metric-label">ELAPSED TIME:</div>
-          <div className="bp-metric-value" style={{ color: '#93d5ff' }}>
+          <div className="bp-metric-value" style={{ color: '#93d5ff', fontVariantNumeric: 'tabular-nums' }}>
             {elapsed}
           </div>
         </div>
