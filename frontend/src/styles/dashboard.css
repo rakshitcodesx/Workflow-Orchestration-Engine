@@ -526,6 +526,7 @@
 
 /* ── Left Ripple Container (Demo Workflows) ── */
 .bp-ripple-card-left {
+  position: relative;
   height: 100%;
   overflow: hidden;
   border-radius: 10px;
@@ -534,13 +535,39 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
-  background-color: #070a0f;
+  background-color: #06090f;
+  box-sizing: border-box;
+  isolation: isolate;
+}
+
+.bp-ripple-card-left::before {
+  content: '';
+  position: absolute;
+  inset: -100px;
+  pointer-events: none;
+  z-index: 0;
+  background-color: #06090f;
   background-image: repeating-radial-gradient(
     circle at 18% 80%,
-    #1d63ff 0px,  #1d63ff 20px,
-    #070a0f 20px, #070a0f 40px
+    rgba(29, 99, 255, 0.35) 0px,
+    rgba(29, 99, 255, 0.35) 18px,
+    rgba(7, 10, 15, 0.65) 19.5px,
+    #070a0f 20px,
+    #070a0f 38px,
+    rgba(7, 10, 15, 0.65) 39.5px,
+    rgba(29, 99, 255, 0.35) 40px
   );
-  box-sizing: border-box;
+  transform-origin: 18% 80%;
+  animation: bp-ripple-breathe-left 24s ease-in-out infinite alternate;
+  opacity: 0.85;
+  will-change: transform, opacity;
+  transition: opacity 0.8s ease, filter 0.8s ease;
+}
+
+.bp-ripple-card-left.bp-ripple-active::before {
+  opacity: 0.98;
+  animation-duration: 16s;
+  filter: drop-shadow(0 0 16px rgba(29, 99, 255, 0.22));
 }
 
 .bp-ripple-inner-left {
@@ -553,6 +580,8 @@
   flex-direction: column;
   gap: 16px;
   overflow: visible;
+  position: relative;
+  z-index: 1;
 }
 
 .bp-instances-header-block {
@@ -567,6 +596,7 @@
 
 /* ── Right Ripple Container (Step Execution Graph) ── */
 .bp-ripple-card-right {
+  position: relative;
   height: 100%;
   overflow: hidden;
   border-radius: 10px;
@@ -575,13 +605,39 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
-  background-color: #070a0f;
+  background-color: #06090f;
+  box-sizing: border-box;
+  isolation: isolate;
+}
+
+.bp-ripple-card-right::before {
+  content: '';
+  position: absolute;
+  inset: -100px;
+  pointer-events: none;
+  z-index: 0;
+  background-color: #06090f;
   background-image: repeating-radial-gradient(
     circle at 82% 20%,
-    #1d63ff 0px,  #1d63ff 20px,
-    #070a0f 20px, #070a0f 40px
+    rgba(29, 99, 255, 0.35) 0px,
+    rgba(29, 99, 255, 0.35) 18px,
+    rgba(7, 10, 15, 0.65) 19.5px,
+    #070a0f 20px,
+    #070a0f 38px,
+    rgba(7, 10, 15, 0.65) 39.5px,
+    rgba(29, 99, 255, 0.35) 40px
   );
-  box-sizing: border-box;
+  transform-origin: 82% 20%;
+  animation: bp-ripple-breathe-right 26s ease-in-out infinite alternate;
+  opacity: 0.85;
+  will-change: transform, opacity;
+  transition: opacity 0.8s ease, filter 0.8s ease;
+}
+
+.bp-ripple-card-right.bp-ripple-active::before {
+  opacity: 0.98;
+  animation-duration: 17s;
+  filter: drop-shadow(0 0 16px rgba(29, 99, 255, 0.22));
 }
 
 .bp-ripple-inner-right {
@@ -596,6 +652,8 @@
   gap: 16px;
   box-sizing: border-box;
   overflow: visible;
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Section Card Header ── */
@@ -1042,4 +1100,78 @@
   font-size: 11px;
   color: var(--ice-blue);
   box-shadow: inset 2px 2px 0px #030508;
+}
+
+/* ════════════════════════════════════
+   14. RIPPLE & SYSTEM ANIMATIONS
+   ════════════════════════════════════ */
+
+@keyframes bp-ripple-breathe-left {
+  0% {
+    transform: scale(1) translate(0px, 0px);
+    opacity: 0.80;
+  }
+  50% {
+    transform: scale(1.03) translate(3px, -4px);
+    opacity: 0.92;
+  }
+  100% {
+    transform: scale(0.98) translate(-2px, 3px);
+    opacity: 0.78;
+  }
+}
+
+@keyframes bp-ripple-breathe-right {
+  0% {
+    transform: scale(1) translate(0px, 0px);
+    opacity: 0.80;
+  }
+  50% {
+    transform: scale(1.035) translate(-4px, 4px);
+    opacity: 0.92;
+  }
+  100% {
+    transform: scale(0.975) translate(2px, -2px);
+    opacity: 0.78;
+  }
+}
+
+/* Subtle node pulse feedback */
+@keyframes pulse-cobalt {
+  0%, 100% {
+    box-shadow: 2px 2px 0px #030508;
+    border-color: var(--cobalt);
+  }
+  50% {
+    box-shadow: 2px 2px 0px #030508, 0 0 8px rgba(29, 99, 255, 0.45);
+    border-color: #3b82f6;
+  }
+}
+
+@keyframes pulse-warning {
+  0%, 100% {
+    box-shadow: 2px 2px 0px #030508;
+    border-color: var(--warning);
+  }
+  50% {
+    box-shadow: 2px 2px 0px #030508, 0 0 8px rgba(245, 158, 11, 0.45);
+    border-color: #fbbf24;
+  }
+}
+
+.animate-pulse-cobalt  { animation: pulse-cobalt 2.4s ease-in-out infinite; }
+.animate-pulse-warning { animation: pulse-warning 2.2s ease-in-out infinite; }
+
+/* Respect user's system motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .bp-ripple-card-left::before,
+  .bp-ripple-card-right::before,
+  .bp-ripple-card-left.bp-ripple-active::before,
+  .bp-ripple-card-right.bp-ripple-active::before,
+  .animate-pulse-cobalt,
+  .animate-pulse-warning {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }

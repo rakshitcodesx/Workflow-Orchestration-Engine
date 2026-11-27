@@ -40,8 +40,12 @@ export default function WorkflowInstances({
     return total > 0 ? Math.round((done / total) * 100) : 0;
   };
 
+  const hasActiveWorkflow = instances.some(
+    (i) => i.status === 'running' || i.status === 'pending'
+  );
+
   return (
-    <div className="bp-ripple-card-left">
+    <div className={`bp-ripple-card-left${hasActiveWorkflow ? ' bp-ripple-active' : ''}`}>
       <div className="bp-ripple-inner-left">
         {/* Top Header & Filter Block */}
         <div className="bp-instances-header-block">

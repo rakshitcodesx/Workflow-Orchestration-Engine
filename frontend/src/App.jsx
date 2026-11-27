@@ -347,7 +347,7 @@ export default function App() {
           />
 
           {/* Right: Step Execution Graph with Isolated Cobalt/Black Ripple Container */}
-          <div className="bp-ripple-card-right">
+          <div className={`bp-ripple-card-right${instance && (instance.status === 'running' || instance.status === 'pending') ? ' bp-ripple-active' : ''}`}>
             <div className="bp-ripple-inner-right">
               {/* Standalone Header Card Over Ripples */}
               <div className="bp-graph-header">
