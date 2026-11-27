@@ -396,6 +396,7 @@
 
 .bp-summary-cards {
   position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
@@ -555,14 +556,7 @@
     rgba(7, 10, 15, 0.60) 39.5px,
     rgba(29, 99, 255, 0.30) 40px
   );
-  transform-origin: 84% 48%;
-  animation: bp-ripple-breathe-right 28s ease-in-out infinite alternate;
-  opacity: 0.75;
-}
-
-.bp-summary-cards {
-  position: relative;
-  z-index: 1;
+  opacity: 0.55;
 }
 
 /* ── Left Ripple Container (Demo Workflows) ── */
