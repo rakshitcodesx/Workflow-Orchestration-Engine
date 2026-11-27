@@ -6,8 +6,9 @@
 import { adaptWorkflowInstance } from './adapters';
 import { MOCK_INSTANCES } from '../data/mockData';
 
-// API base path — uses Vite proxy by default, or env override
-const API_BASE = import.meta.env.VITE_BACKEND_URL || '';
+// API base path — uses Vite proxy by default, or env override (stripping any trailing slash)
+const rawUrl = import.meta.env.VITE_BACKEND_URL || '';
+const API_BASE = rawUrl.trim().replace(/\/+$/, '');
 
 /**
  * Handle API responses with proper JSON parsing and error handling.

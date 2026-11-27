@@ -9,6 +9,10 @@ import uuid
 from datetime import datetime, timezone
 
 from flask import Flask, jsonify, request
+try:
+    from flask_cors import CORS
+except ImportError:
+    CORS = None
 
 import storage
 from engine import WorkflowEngine
@@ -26,7 +30,16 @@ logger = logging.getLogger(__name__)
 # App & engine
 # ---------------------------------------------------------------------------
 app = Flask(__name__)
+if CORS is not None:
+    CORS(app, resources={r"/*": {"origins": "*"}})
 engine = WorkflowEngine()
+
+# Execute boot-time crash recovery on startup (supports gunicorn app:app and direct python app.py)
+logger.info("Executing boot-time recovery…")
+try:
+    engine.recover_interrupted_instances()
+except Exception as exc:
+    logger.error("Failed to run boot-time recovery: %s", exc)
 
 
 # ---------------------------------------------------------------------------
@@ -55,11 +68,26 @@ def apply_cors_headers(response):
 
 
 # ---------------------------------------------------------------------------
-# Helper
+# Helper & Health check
 # ---------------------------------------------------------------------------
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+@app.route("/", methods=["GET"])
+@app.route("/health", methods=["GET"])
+@app.route("/workflows/health-check-probe", methods=["GET"])
+def health_check():
+    """
+    Lightweight health check probe for platform uptime monitors (Render, Railway)
+    and frontend connectivity probing.
+    """
+    return jsonify({
+        "status": "healthy",
+        "service": "workflow-orchestration-engine",
+        "timestamp": _now_iso()
+    }), 200
 
 
 # ---------------------------------------------------------------------------
@@ -356,12 +384,8 @@ def approve_instance(instance_id: str):
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    # Execute boot-time crash recovery before starting the server.
-    logger.info("Executing boot-time recovery…")
-    engine.recover_interrupted_instances()
-
-    # Allow port override via environment variable for testing.
-    port = int(os.environ.get("WF_PORT", "5000"))
+    # Allow port override via PORT (Render/Railway standard) or WF_PORT, defaulting to 5001.
+    port = int(os.environ.get("PORT", os.environ.get("WF_PORT", "5001")))
     logger.info(f"Starting Flask server on 0.0.0.0:{port}…")
-    app.run(debug=True, host="0.0.0.0", port=port)
+    app.run(debug=False, host="0.0.0.0", port=port)
 
