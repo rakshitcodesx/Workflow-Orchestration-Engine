@@ -375,7 +375,7 @@
 }
 
 /* ════════════════════════════════════
-   8. 4-COLUMN SUMMARY STRIP (RIPPLE #1)
+   8. 4-COLUMN SUMMARY STRIP (BLUEPRINT BUS)
    ════════════════════════════════════ */
 .bp-summary-strip-wrapper {
   position: relative;
@@ -385,13 +385,53 @@
   box-shadow: 6px 6px 0px #030508;
   padding: 12px 14px;
   background-color: #070a0f;
-  background-image: repeating-radial-gradient(
-    circle at 84% 48%,
-    #1d63ff 0px,  #1d63ff 20px,
-    #070a0f 20px, #070a0f 40px
-  );
+  background-image:
+    linear-gradient(90deg, rgba(71, 91, 125, 0.16) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(71, 91, 125, 0.16) 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: center center;
   flex-shrink: 0;
   box-sizing: border-box;
+}
+
+/* Dual horizontal telemetry bus tracks (top & bottom) with tick marks */
+.bp-summary-strip-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    /* Top bus rail */
+    linear-gradient(90deg, rgba(71, 91, 125, 0.45), rgba(71, 91, 125, 0.45)) 0 5px / 100% 1px no-repeat,
+    /* Top bus tick marks */
+    repeating-linear-gradient(90deg, rgba(34, 211, 238, 0.35) 0px, rgba(34, 211, 238, 0.35) 2px, transparent 2px, transparent 16px) 0 3px / 100% 5px no-repeat,
+    /* Bottom bus rail */
+    linear-gradient(90deg, rgba(71, 91, 125, 0.45), rgba(71, 91, 125, 0.45)) 0 calc(100% - 6px) / 100% 1px no-repeat,
+    /* Bottom bus tick marks */
+    repeating-linear-gradient(90deg, rgba(34, 211, 238, 0.35) 0px, rgba(34, 211, 238, 0.35) 2px, transparent 2px, transparent 16px) 0 calc(100% - 8px) / 100% 5px no-repeat;
+  opacity: 0.85;
+}
+
+/* Active telemetry data packet sweep along dual bus tracks */
+.bp-summary-strip-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bp-summary-strip-wrapper.bp-summary-active::after {
+  opacity: 1;
+  background:
+    /* Top bus data packet sweep */
+    linear-gradient(90deg, transparent 0%, rgba(34, 211, 238, 0.15) 20%, rgba(34, 211, 238, 0.95) 50%, rgba(34, 211, 238, 0.15) 80%, transparent 100%) 0 4px / 160px 3px no-repeat,
+    /* Bottom bus data packet sweep (offset) */
+    linear-gradient(90deg, transparent 0%, rgba(29, 99, 255, 0.15) 20%, rgba(34, 211, 238, 0.95) 50%, rgba(29, 99, 255, 0.15) 80%, transparent 100%) 0 calc(100% - 7px) / 160px 3px no-repeat;
+  animation: telemetry-bus-slide 4.5s linear infinite;
 }
 
 .bp-summary-cards {
@@ -452,10 +492,19 @@
 
 .bp-progress-fill {
   height: 100%;
-  background: var(--cyan);
+  background: linear-gradient(
+    90deg,
+    var(--cyan) 0%,
+    #38bdf8 35%,
+    #e0f2fe 50%,
+    #38bdf8 65%,
+    var(--cyan) 100%
+  );
+  background-size: 200% 100%;
   border-radius: 2px;
   transition: width 0.4s ease;
-  box-shadow: 0 0 6px rgba(34, 211, 238, 0.4);
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.45);
+  animation: progress-shimmer 3.2s ease-in-out infinite;
 }
 
 /* ════════════════════════════════════
@@ -539,25 +588,6 @@
   .bp-bottom-grid { grid-template-columns: 1fr; }
 }
 
-/* ── Summary strip ripple softening (matches left/right card treatment) ── */
-.bp-summary-strip-wrapper::before {
-  content: '';
-  position: absolute;
-  inset: -80px;
-  pointer-events: none;
-  z-index: 0;
-  background-image: repeating-radial-gradient(
-    circle at 84% 48%,
-    rgba(29, 99, 255, 0.30) 0px,
-    rgba(29, 99, 255, 0.30) 18px,
-    rgba(7, 10, 15, 0.60) 19.5px,
-    #070a0f 20px,
-    #070a0f 38px,
-    rgba(7, 10, 15, 0.60) 39.5px,
-    rgba(29, 99, 255, 0.30) 40px
-  );
-  opacity: 0.55;
-}
 
 /* ── Left Ripple Container (Demo Workflows) ── */
 .bp-ripple-card-left {
@@ -812,7 +842,7 @@
   background: #070a0f;
   color: var(--text-secondary);
   box-shadow: 2px 2px 0px #030508;
-  transition: all var(--transition-fast);
+  transition: all 0.16s ease;
   text-transform: capitalize;
 }
 .bp-filter-pill.active {
@@ -824,6 +854,12 @@
 .bp-filter-pill:hover:not(.active) {
   border-color: var(--outline-bright);
   color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: 3px 3px 0px #030508;
+}
+.bp-filter-pill:active {
+  transform: translateY(0);
+  box-shadow: 1px 1px 0px #030508;
 }
 
 /* ════════════════════════════════════
@@ -870,8 +906,9 @@
   background: var(--surface-variant);
 }
 .bp-table tbody tr.row-active {
-  background: rgba(29, 99, 255, 0.12);
-  border-bottom-color: rgba(29, 99, 255, 0.30);
+  background: rgba(29, 99, 255, 0.14);
+  border-bottom-color: rgba(29, 99, 255, 0.40);
+  box-shadow: inset 3px 0 0 #22d3ee;
 }
 
 .bp-table tbody td {
@@ -904,6 +941,7 @@
   box-shadow: 2px 2px 0px #030508;
   white-space: nowrap;
   text-transform: uppercase;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 /* Status dot inside each badge */
@@ -914,6 +952,7 @@
   height: 5px;
   border-radius: 50%;
   flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
 .bp-status-running {
@@ -924,6 +963,7 @@
 .bp-status-running::before {
   background: #f59e0b;
   box-shadow: 0 0 4px rgba(245, 158, 11, 0.70);
+  animation: badge-dot-pulse 2s ease-in-out infinite;
 }
 
 .bp-status-succeeded, .bp-status-completed {
@@ -1003,8 +1043,16 @@
 }
 
 .bp-step-connector-line.running {
-  background: var(--cobalt);
-  opacity: 0.70;
+  background: repeating-linear-gradient(
+    180deg,
+    var(--cobalt) 0px,
+    var(--cobalt) 4px,
+    rgba(29, 99, 255, 0.25) 4px,
+    rgba(29, 99, 255, 0.25) 8px
+  );
+  background-size: 2px 16px;
+  animation: rail-flow-down 1.2s linear infinite;
+  opacity: 0.90;
 }
 
 .bp-step-connector-arrow {
@@ -1051,16 +1099,30 @@
 .bp-step-card {
   background: #0d131d;
   border: 1.5px solid #475b7d;
+  border-left: 3.5px solid #475b7d;
   border-radius: 6px;
   padding: 12px 14px;
   box-shadow: 4px 4px 0px #030508;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), border-left-color var(--transition-fast);
   margin-bottom: 0;
 }
-.bp-step-card-running   { border-color: var(--cobalt); }
-.bp-step-card-waiting   { border-color: var(--warning); }
-.bp-step-card-failed    { border-color: var(--error); }
-.bp-step-card-succeeded { border-color: rgba(16, 185, 129, 0.40); }
+.bp-step-card-running   {
+  border-color: var(--cobalt);
+  border-left: 3.5px solid #3b82f6;
+  animation: step-running-glow 3s ease-in-out infinite;
+}
+.bp-step-card-waiting   {
+  border-color: var(--warning);
+  border-left: 3.5px solid #f59e0b;
+}
+.bp-step-card-failed    {
+  border-color: var(--error);
+  border-left: 3.5px solid #ef4444;
+}
+.bp-step-card-succeeded {
+  border-color: rgba(16, 185, 129, 0.40);
+  border-left: 3.5px solid #10b981;
+}
 
 .bp-step-title-row {
   display: flex;
@@ -1149,6 +1211,25 @@
   width: 2px;
   height: 8px;
   background: rgba(34, 211, 238, 0.35);
+  transition: background 0.2s ease;
+}
+
+.bp-wal-rail-line.succeeded {
+  background: var(--success);
+  opacity: 0.70;
+}
+
+.bp-wal-rail-line.running {
+  background: repeating-linear-gradient(
+    180deg,
+    var(--cyan) 0px,
+    var(--cyan) 4px,
+    rgba(34, 211, 238, 0.20) 4px,
+    rgba(34, 211, 238, 0.20) 8px
+  );
+  background-size: 2px 16px;
+  animation: rail-flow-down 1.2s linear infinite;
+  opacity: 0.95;
 }
 
 .bp-wal-badge-inner {
@@ -1297,6 +1378,63 @@
   }
 }
 
+/* Horizontal telemetry bus data packet sweep */
+@keyframes telemetry-bus-slide {
+  0% {
+    background-position: -180px 4px, calc(100% + 180px) calc(100% - 7px);
+  }
+  100% {
+    background-position: calc(100% + 180px) 4px, -180px calc(100% - 7px);
+  }
+}
+
+/* Downward step connector rail dash flow */
+@keyframes rail-flow-down {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 16px;
+  }
+}
+
+/* Subtle progress fill light-streak shimmer */
+@keyframes progress-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  50% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+/* Steady, gentle status dot heartbeat */
+@keyframes badge-dot-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 4px rgba(245, 158, 11, 0.65);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.25);
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.95);
+    opacity: 1;
+  }
+}
+
+/* Running step card left accent color breathe */
+@keyframes step-running-glow {
+  0%, 100% {
+    border-left-color: #1d63ff;
+  }
+  50% {
+    border-left-color: #38bdf8;
+  }
+}
+
 .animate-pulse-cobalt  { animation: pulse-cobalt 2.4s ease-in-out infinite; }
 .animate-pulse-warning { animation: pulse-warning 2.2s ease-in-out infinite; }
 
@@ -1306,6 +1444,13 @@
   .bp-ripple-card-right::before,
   .bp-ripple-card-left.bp-ripple-active::before,
   .bp-ripple-card-right.bp-ripple-active::before,
+  .bp-summary-strip-wrapper.bp-summary-active::after,
+  .bp-progress-fill,
+  .bp-step-connector-line.running,
+  .bp-wal-rail-line.running,
+  .bp-status-running::before,
+  .bp-step-card-running,
+  .bp-filter-pill,
   .animate-pulse-cobalt,
   .animate-pulse-warning {
     animation: none !important;

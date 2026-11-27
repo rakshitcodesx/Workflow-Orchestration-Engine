@@ -179,7 +179,7 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
             {/* Connector rail + WAL_CHECKPOINT_OK badge between steps */}
             {!isLast && (
               <div className="bp-wal-badge">
-                <div className="bp-wal-rail-line" />
+                <div className={`bp-wal-rail-line${isSucceeded ? ' succeeded' : isRunning ? ' running' : ''}`} />
                 {showWalBadge ? (
                   <span className="bp-wal-badge-inner">↓ WAL_CHECKPOINT_OK</span>
                 ) : (
@@ -189,7 +189,7 @@ export default function StepTimeline({ instance, onApproveStep, isSubmittingDeci
                     <div className={`bp-step-connector-line ${connectorClass}`} />
                   </div>
                 )}
-                <div className="bp-wal-rail-line" />
+                <div className={`bp-wal-rail-line${isRunning ? ' running' : ''}`} />
               </div>
             )}
           </React.Fragment>

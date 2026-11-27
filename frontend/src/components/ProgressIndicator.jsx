@@ -53,8 +53,10 @@ export default function ProgressIndicator({ instance, isDemoMode = false }) {
       ? 'var(--error-text)'
       : '#22d3ee';
 
+  const isActive = status === 'running' || status === 'waiting_approval';
+
   return (
-    <div className="bp-summary-strip-wrapper">
+    <div className={`bp-summary-strip-wrapper${isActive ? ' bp-summary-active' : ''}`}>
       <div className="bp-summary-cards">
         {/* 1: Workflow Status */}
         <div className="bp-metric-box">
