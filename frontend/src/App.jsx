@@ -285,8 +285,8 @@ export default function App() {
               <AlertTriangle size={16} color="#ef4444" style={{ flexShrink: 0 }} />
               <span>
                 <strong>Backend Offline:</strong> Unable to connect to Flask on{' '}
-                <code style={{ fontFamily: 'var(--font-mono)' }}>http://127.0.0.1:5000</code>.
-                Start with <code style={{ fontFamily: 'var(--font-mono)' }}>python3 app.py</code> or switch to Demo Mode.
+                <code style={{ fontFamily: 'var(--font-mono)' }}>http://127.0.0.1:5001</code>.
+                Start with <code style={{ fontFamily: 'var(--font-mono)' }}>WF_PORT=5001 python3 app.py</code> or switch to Demo Mode.
               </span>
             </div>
             <div style={{ display: 'flex', gap: 6 }}>

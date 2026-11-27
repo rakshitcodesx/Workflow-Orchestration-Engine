@@ -1,17 +1,40 @@
-# PST_AD_165 — Durable Workflow Orchestration Engine
+# Workflow Orchestration Engine (PST_AD_165)
 
-A fault-tolerant AI workflow orchestration engine and real-time monitoring dashboard built with **Python (Flask)** and **React (Vite)**. It persists workflow and step state using an **atomic Write-Ahead Log (WAL)**, recovers interrupted runs automatically on startup with **Zero-Token-Waste** step skipping, pauses at **Human-in-the-Loop (HITL)** approval gates, and exposes live state and metrics over a REST API.
+## Overview
+
+Workflow Orchestration Engine (PST_AD_165) is a fault-tolerant, durable execution engine built with Python/Flask and React + Vite. Designed for multi-step AI and data pipelines, it ensures workflows survive network drops, API rate limits, and server crashes without re-running completed steps or wasting duplicate LLM inference tokens.
 
 ---
 
-## Core Features
+## Key Capabilities
 
-* **Atomic Write-Ahead Log (`storage.py`, `state.json`):** Serializes state to a temporary file, flushes buffers (`flush` + `os.fsync`), and performs an atomic rename (`os.replace`) under a thread lock so crashes or `SIGKILL`s never corrupt persisted state.
-* **Boot-Time Crash Recovery & Zero-Token-Waste (`engine.py`, `app.py`):** Scans `state.json` on startup (`recover_interrupted_instances()`) for workflows interrupted mid-run, resumes execution in background worker threads, and skips already-`succeeded` steps while tracking skip counts thread-safely.
-* **Human-in-the-Loop (HITL) Approval Gates:** Pauses execution cleanly at approval checkpoints (`waiting_approval`) until an operator approves or rejects the step via API or dashboard.
-* **Retry & Error Handling:** Tracks per-step attempts, transient error messages, and retries without losing progress on earlier completed steps.
-* **Chaos Testing (`test_crash.py`):** Automates hard process kills (`SIGKILL` / `kill -9`) across 20 iterations and verifies clean recovery and state integrity.
-* **Real-Time Dashboard (`frontend/`):** Live polling UI with instance status filtering, UUID lookup, step execution timeline, raw JSON inspector, approval/rejection/retry controls, and Demo Mode fallback.
+* **Atomic Write-Ahead Log (WAL) Checkpointing:** Commits durable state snapshots (`WAL_CHECKPOINT_OK`) after every step execution so runs can deterministically resume from the exact point of failure.
+* **Zero-Token-Waste Crash Recovery:** Skips already-succeeded upstream steps (Data Ingestion, AI Analysis, etc.) during retries or post-crash recovery, preventing redundant LLM calls.
+* **Bounded Retry Policies:** Automatically handles transient step failures with configurable retry attempts (1/3, 2/3) and clear error surfacing.
+* **Human-in-the-Loop (HITL) Approval Gates:** Pauses execution cleanly (`WAITING APPROVAL`) at critical checkpoints so operators can inspect intermediate outputs and Approve & Continue or Reject before persisting results.
+* **Real-Time Blueprint Observability Dashboard:**
+  * **Live Mode & Demo Mode:** Connects to the Flask backend (port 5001) with configurable polling or simulates full workflow lifecycles in-browser.
+  * **Instance & Step Inspection:** Filter runs by status (All, Running, Completed, Failed), look up instances by UUID, inspect raw JSON payloads, and monitor step-level execution metrics.
+
+---
+
+## Quick Start
+
+### 1. Start the Flask Backend
+
+```bash
+WF_PORT=5001 python3 app.py
+```
+
+### 2. Start the React + Vite Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser and toggle between **Live** (connected to Flask on port 5001) and **Demo** mode in the top-right header.
 
 ---
 
@@ -28,49 +51,10 @@ workflow-engine/
 │   └── agent_flow.json # Workflow template definition and step specifications
 └── frontend/           # React + Vite monitoring dashboard
     └── src/
-        ├── components/ # Header, command bar, instance table, step graph, aqua wave backdrop
+        ├── components/ # Header, command bar, instance table, step graph, confirm dialogs
         ├── services/   # REST API client and mock data adapters
-        └── styles/     # Design tokens, glass surfaces, and dashboard layout styles
+        └── styles/     # Design tokens, blueprint grid canvas, and dashboard layout styles
 ```
-
----
-
-## Getting Started
-
-### Prerequisites
-* Python 3.10+ (with virtual environment)
-* Node.js 18+ & npm
-
-### 1. Backend Setup
-
-```bash
-# Navigate to project root
-cd workflow-engine
-
-# Activate virtual environment
-source venv/bin/activate
-
-# Install dependencies (if not already installed)
-pip install -r requirements.txt
-
-# Start the Flask API server (runs on port 5000)
-python3 app.py
-```
-
-### 2. Frontend Setup
-
-```bash
-# In a separate terminal, navigate to frontend directory
-cd workflow-engine/frontend
-
-# Install dependencies
-npm install
-
-# Start Vite dev server (runs on port 3000 with proxy to :5000)
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser to access the dashboard.
 
 ---
 
@@ -89,13 +73,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to access th
 
 ## Architecture & Guarantees
 
-### Zero-Token-Waste
+### Zero-Token-Waste Crash Recovery
 When an interrupted workflow is resumed after a crash or process restart, the state machine reads the latest persisted step list from `state.json`. Any step already marked `succeeded` is immediately skipped without re-invoking simulated LLM or agent work, completely eliminating redundant token consumption.
 
 ### Atomic WAL Durability
 State mutations follow a strict write-ahead log protocol:
 1. Serialize updated state dictionary to JSON.
-2. Write to a temporary file (`state.json.tmp.<uuid>`) in the same filesystem.
+2. Write to a temporary file (`state.json.tmp.<uuid>`) on the same filesystem.
 3. Flush application buffers with `fh.flush()` followed by OS filesystem cache sync with `os.fsync(fh.fileno())`.
 4. Perform an atomic filesystem rename with `os.replace()`.
 5. All operations are synchronized via a mutual exclusion lock (`threading.Lock`).
